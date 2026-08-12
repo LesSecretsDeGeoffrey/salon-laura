@@ -1,0 +1,2753 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#42534F">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Mon salon">
+<meta name="robots" content="noindex,nofollow">
+<link rel="manifest" href="manifest.webmanifest">
+<title>Mon salon — Laura</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500&display=swap" rel="stylesheet">
+<style>
+/* ==========================================================================
+   MON SALON v2 — design system
+   Charte Laura : sauge / crème / or · Cormorant Garamond + system sans
+   ========================================================================== */
+:root{
+  --sauge:#5A6E6A; --sauge-clair:#7E9184; --sauge-pale:#E9EEEA; --sauge-fonce:#42534F; --sauge-nuit:#32403D;
+  --creme:#FAF6F1; --creme2:#F2EBE1; --blanc:#FFFDFA;
+  --encre:#3D3229; --encre2:#6B5F52; --encre3:#9A8D7E;
+  --or:#C8A04A; --or-profond:#8B6914; --or-pale:#F6EEDC;
+  --bord:#E6DCCD; --bord-fort:#D4C4B0;
+  --rouge:#B4553F; --rouge-pale:#F7E8E4;
+  --vert:#4F7A57; --vert-pale:#E6EFE7;
+  --r:16px; --rs:11px;
+  --sh:0 1px 2px rgba(61,50,41,.05),0 4px 14px rgba(61,50,41,.06);
+  --sh-fort:0 6px 24px rgba(61,50,41,.14);
+  --safe-b:env(safe-area-inset-bottom,0px);
+  --safe-t:env(safe-area-inset-top,0px);
+  --nav-h:calc(62px + var(--safe-b));
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+button,.nav,.seg,.chips{-webkit-user-select:none;user-select:none}
+html,body{margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  background:var(--creme); color:var(--encre);
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  font-size:15.5px; line-height:1.5; -webkit-font-smoothing:antialiased;
+  padding-bottom:var(--nav-h);
+  overflow-x:hidden;
+}
+h1,h2,h3,.serif{font-family:"Cormorant Garamond",Georgia,serif;font-variant-numeric:lining-nums;margin:0;font-weight:600}
+.num{font-family:"Cormorant Garamond",Georgia,serif;font-variant-numeric:lining-nums tabular-nums;font-weight:600;letter-spacing:.01em}
+button,input,select,textarea{font:inherit;color:inherit}
+button{cursor:pointer;border:none;background:none;padding:0;text-align:left}
+a{color:var(--sauge);font-weight:600;text-decoration:none}
+svg{display:block;flex:none}
+.hidden{display:none!important}
+.muted{color:var(--encre2)}
+.tiny{font-size:13px;line-height:1.45}
+.mini{font-size:12px;color:var(--encre2)}
+.neg{color:var(--rouge)}
+.pos{color:var(--vert)}
+.between{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.row{display:flex;align-items:center;gap:10px}
+
+/* ---------- Structure ---------- */
+#app{max-width:560px;margin:0 auto;padding:calc(10px + var(--safe-t)) 16px 20px}
+.scr{display:none}
+.scr.on{display:block;animation:scrIn .26s ease both}
+@keyframes scrIn{from{opacity:0;transform:translateY(7px)}to{opacity:1;transform:none}}
+
+/* ---------- En-tête d'écran ---------- */
+.hd{margin:8px 0 14px}
+.hd .over{font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--sauge);font-weight:700;margin-bottom:2px}
+.hd h1{font-size:31px;line-height:1.08}
+.hd .sub{font-size:13.5px;color:var(--encre2);margin-top:3px}
+.hd-row{display:flex;align-items:flex-end;justify-content:space-between;gap:10px}
+.icobtn{width:44px;height:44px;border-radius:13px;display:flex;align-items:center;justify-content:center;background:var(--blanc);border:1px solid var(--bord);color:var(--sauge-fonce);box-shadow:var(--sh);transition:background .18s}
+.icobtn:active{background:var(--sauge-pale)}
+.icobtn svg{width:20px;height:20px;stroke-width:1.9}
+
+/* ---------- Navigation de période ---------- */
+.pernav{display:flex;align-items:center;justify-content:space-between;gap:8px;margin:0 0 12px}
+.pernav .lbl{font-family:"Cormorant Garamond",Georgia,serif;font-variant-numeric:lining-nums;font-size:20px;font-weight:600}
+.pernav .arr{width:44px;height:44px;border-radius:12px;background:var(--blanc);border:1px solid var(--bord);display:flex;align-items:center;justify-content:center;color:var(--sauge-fonce)}
+.pernav .arr:disabled{opacity:.35;cursor:default}
+.pernav .arr svg{width:17px;height:17px;stroke-width:2.2}
+
+/* ---------- Segmented ---------- */
+.seg{display:flex;background:var(--creme2);border-radius:13px;padding:3px;gap:2px;margin-bottom:14px}
+.seg button{flex:1;min-height:42px;border-radius:10px;font-size:13.5px;font-weight:600;color:var(--encre2);display:flex;align-items:center;justify-content:center;gap:5px;transition:background .18s,color .18s;position:relative}
+.seg button.on{background:var(--blanc);color:var(--sauge-fonce);box-shadow:0 1px 4px rgba(61,50,41,.10)}
+.seg .bdg{min-width:17px;height:17px;padding:0 4px;border-radius:9px;background:var(--or);color:#fff;font-size:10.5px;font-weight:700;display:inline-flex;align-items:center;justify-content:center}
+
+/* ---------- Cartes ---------- */
+.card{background:var(--blanc);border:1px solid var(--bord);border-radius:var(--r);padding:16px;box-shadow:var(--sh);margin-bottom:12px}
+.card.tight{padding:12px}
+.card-t{font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--encre2);font-weight:700;margin-bottom:11px}
+.card-t .lien{float:right;letter-spacing:0;text-transform:none;font-size:12.5px;padding:8px 2px;margin:-8px 0}
+
+/* ---------- Bloc « à faire » ---------- */
+.todo{display:flex;flex-direction:column;gap:8px;margin-bottom:14px}
+.todo-it{display:flex;align-items:center;gap:12px;background:var(--blanc);border:1px solid var(--bord);border-radius:14px;padding:11px 12px;box-shadow:var(--sh);width:100%;min-height:56px;transition:transform .12s}
+.todo-it:active{transform:scale(.985)}
+.todo-it .ic{width:38px;height:38px;border-radius:11px;display:flex;align-items:center;justify-content:center;flex:none}
+.todo-it .ic svg{width:19px;height:19px;stroke-width:1.9}
+.todo-it .ic.sauge{background:var(--sauge-pale);color:var(--sauge-fonce)}
+.todo-it .ic.or{background:var(--or-pale);color:var(--or-profond)}
+.todo-it .ic.rouge{background:var(--rouge-pale);color:var(--rouge)}
+.todo-it .tx{flex:1;min-width:0}
+.todo-it .tx b{display:block;font-size:14.5px}
+.todo-it .tx small{display:block;font-size:12.5px;color:var(--encre2)}
+.todo-it>svg{width:16px;height:16px;color:var(--encre3);stroke-width:2.2}
+
+/* ---------- Héro « prochaine cliente » ---------- */
+.hero{position:relative;overflow:hidden;background:linear-gradient(145deg,var(--sauge-fonce),var(--sauge-nuit));border-radius:20px;padding:18px;color:var(--creme);box-shadow:var(--sh-fort);margin-bottom:14px}
+.hero::after{content:'';position:absolute;right:-52px;top:-52px;width:170px;height:170px;border-radius:50%;background:radial-gradient(circle,rgba(200,160,74,.22),transparent 68%)}
+.hero .over{font-size:10.5px;letter-spacing:.18em;text-transform:uppercase;color:rgba(250,246,241,.66);font-weight:700;margin-bottom:8px;display:flex;align-items:center;gap:6px}
+.hero .over .dotl{width:7px;height:7px;border-radius:50%;background:var(--or);animation:pulse 2.4s ease infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.35}}
+.hero .qui{display:flex;align-items:center;gap:13px;position:relative}
+.hero .avat{width:52px;height:52px;border-radius:50%;background:rgba(250,246,241,.13);border:1px solid rgba(250,246,241,.22);display:flex;align-items:center;justify-content:center;font-family:"Cormorant Garamond",Georgia,serif;font-size:21px;font-weight:600;color:var(--or);flex:none}
+.hero .nom{font-family:"Cormorant Garamond",Georgia,serif;font-size:25px;line-height:1.1;font-weight:600}
+.hero .soin{font-size:13px;color:rgba(250,246,241,.78);margin-top:2px}
+.hero .quand{text-align:right;margin-left:auto}
+.hero .quand .h{font-family:"Cormorant Garamond",Georgia,serif;font-variant-numeric:lining-nums;font-size:27px;font-weight:600;color:var(--or)}
+.hero .quand small{display:block;font-size:11.5px;color:rgba(250,246,241,.66)}
+.hero .note{margin:11px 0 0;padding:9px 11px;background:rgba(250,246,241,.09);border-left:2px solid var(--or);border-radius:8px;font-size:13px;color:rgba(250,246,241,.9);position:relative}
+.hero .act{display:flex;gap:8px;margin-top:13px;position:relative}
+.hero .act .hbtn{flex:1;min-height:46px;border-radius:12px;display:flex;align-items:center;justify-content:center;gap:7px;font-size:14px;font-weight:600;background:rgba(250,246,241,.11);border:1px solid rgba(250,246,241,.2);color:var(--creme);transition:background .18s}
+.hero .act .hbtn:active{background:rgba(250,246,241,.2)}
+.hero .act .hbtn.gold{background:var(--or);border-color:var(--or);color:#fff}
+.hero .act .hbtn svg{width:17px;height:17px;stroke-width:2}
+
+/* ---------- Chiffres du jour ---------- */
+.jstats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:14px}
+.jstat{background:var(--blanc);border:1px solid var(--bord);border-radius:14px;padding:11px 12px;box-shadow:var(--sh)}
+.jstat .v{font-family:"Cormorant Garamond",Georgia,serif;font-variant-numeric:lining-nums;font-size:22px;font-weight:600;line-height:1.1}
+.jstat .l{font-size:11.5px;color:var(--encre2);margin-top:2px}
+.jstat.gold .v{color:var(--or-profond)}
+
+/* ---------- Listes / séances ---------- */
+.lst{display:flex;flex-direction:column;gap:2px}
+.it{display:flex;align-items:center;gap:11px;padding:11px 4px;width:100%;border-bottom:1px solid var(--creme2);min-height:52px}
+.it:last-child{border-bottom:none}
+.it .m{flex:1;min-width:0}
+.it .m b{display:block;font-size:14.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.it .m small{display:block;font-size:12.5px;color:var(--encre2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.it .v{font-family:"Cormorant Garamond",Georgia,serif;font-variant-numeric:lining-nums;font-size:17px;font-weight:600;flex:none}
+button.it{transition:background .15s;border-radius:10px}
+button.it:active{background:var(--creme2)}
+
+.seance{display:flex;align-items:center;gap:12px;width:100%;background:var(--blanc);border:1px solid var(--bord);border-radius:14px;padding:12px 13px;box-shadow:var(--sh);margin-bottom:8px;min-height:64px;transition:transform .12s;position:relative;overflow:hidden}
+.seance:active{transform:scale(.985)}
+.seance .bar-c{position:absolute;left:0;top:0;bottom:0;width:4px}
+.seance .h{font-family:"Cormorant Garamond",Georgia,serif;font-variant-numeric:lining-nums;font-size:18px;font-weight:600;width:47px;flex:none;color:var(--sauge-fonce)}
+.seance .m{flex:1;min-width:0}
+.seance .m b{display:block;font-size:15px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.seance .m span{display:block;font-size:12.5px;color:var(--encre2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.seance .p{text-align:right;flex:none}
+.seance .p .v{font-family:"Cormorant Garamond",Georgia,serif;font-variant-numeric:lining-nums;font-size:17px;font-weight:600}
+.seance.passee{opacity:.62}
+
+.pill{display:inline-flex;align-items:center;gap:4px;font-size:10.5px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;padding:2.5px 8px;border-radius:99px}
+.pill.prevue{background:var(--creme2);color:var(--encre2)}
+.pill.honoree{background:var(--vert-pale);color:var(--vert)}
+.pill.annulee{background:var(--creme2);color:var(--encre2)}
+.pill.noshow{background:var(--rouge-pale);color:var(--rouge)}
+.pill.due{background:var(--or-pale);color:var(--or-profond)}
+
+.sec-t{font-size:12px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--encre2);margin:16px 0 8px 2px}
+
+/* ---------- Timeline agenda (vue jour) ---------- */
+.strip{display:flex;gap:6px;overflow-x:auto;padding:2px 2px 10px;margin:0 -2px;scrollbar-width:none}
+.strip::-webkit-scrollbar{display:none}
+.strip .dbtn{flex:none;width:52px;min-height:64px;border-radius:14px;background:var(--blanc);border:1px solid var(--bord);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;transition:background .15s}
+.strip .dbtn .dn{font-size:10.5px;text-transform:uppercase;letter-spacing:.06em;color:var(--encre2);font-weight:700}
+.strip .dbtn .dd{font-family:"Cormorant Garamond",Georgia,serif;font-variant-numeric:lining-nums;font-size:20px;font-weight:600;line-height:1}
+.strip .dbtn .dot{width:5px;height:5px;border-radius:50%;background:var(--or);margin-top:2px}
+.strip .dbtn .dot.none{background:transparent}
+.strip .dbtn.off{opacity:.42}
+.strip .dbtn.on{background:var(--sauge-fonce);border-color:var(--sauge-fonce)}
+.strip .dbtn.on .dn,.strip .dbtn.on .dd{color:var(--creme)}
+.strip .dbtn.today:not(.on){border-color:var(--sauge);border-width:1.5px}
+
+.tl{position:relative;background:var(--blanc);border:1px solid var(--bord);border-radius:var(--r);box-shadow:var(--sh);overflow:hidden;margin-bottom:12px}
+.tl .hr{position:absolute;left:0;right:0;border-top:1px dashed var(--creme2);pointer-events:none}
+.tl .hlbl{position:absolute;left:10px;transform:translateY(-55%);font-size:11px;color:var(--encre2);font-variant-numeric:tabular-nums;background:var(--blanc);padding:0 3px;pointer-events:none}
+.tl .closed{position:absolute;left:0;right:0;background:repeating-linear-gradient(-45deg,transparent 0 7px,rgba(61,50,41,.035) 7px 9px);pointer-events:none}
+.tl .now{position:absolute;left:46px;right:0;border-top:2px solid var(--or);z-index:3;pointer-events:none}
+.tl .now::before{content:'';position:absolute;left:-5px;top:-5px;width:8px;height:8px;border-radius:50%;background:var(--or)}
+.tl .blk{position:absolute;left:56px;right:10px;border-radius:11px;padding:7px 10px;overflow:hidden;border:none;box-shadow:0 1px 5px rgba(61,50,41,.09);z-index:2;display:block;text-align:left}
+.tl .blk b{display:block;font-size:13.5px;line-height:1.25;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tl .blk small{display:block;font-size:11.5px;opacity:.75;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tl .blk .pmark{position:absolute;right:8px;top:7px}
+.tl .blk .pmark svg{width:14px;height:14px;stroke-width:2.6}
+.tl .slot{position:absolute;left:56px;right:10px;z-index:1;border-radius:11px;border:1.5px dashed transparent;display:flex;align-items:center;justify-content:center;color:transparent;transition:border-color .15s,color .15s}
+.tl .slot:active{border-color:var(--sauge-clair);color:var(--sauge);background:var(--sauge-pale)}
+.tl .slot svg{width:16px;height:16px;stroke-width:2.2}
+
+/* ---------- Semaine / mois ---------- */
+.wk{display:grid;grid-template-columns:repeat(7,1fr);gap:5px;margin-bottom:12px}
+.wk .d{background:var(--blanc);border:1px solid var(--bord);border-radius:12px;padding:8px 3px;text-align:center;min-height:64px}
+.wk .d.off{opacity:.42;background:transparent}
+.wk .d.today{border-color:var(--sauge);border-width:1.5px}
+.wk .dn{font-size:10px;text-transform:uppercase;letter-spacing:.05em;color:var(--encre2);font-weight:700}
+.wk .dd{font-family:"Cormorant Garamond",Georgia,serif;font-variant-numeric:lining-nums;font-size:18px;font-weight:600}
+.wk .dc{font-size:10.5px;color:var(--or-profond);font-weight:700;margin-top:2px;min-height:14px}
+.mo{display:grid;grid-template-columns:repeat(7,1fr);gap:3px}
+.mo .c{aspect-ratio:1;border-radius:9px;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:12.5px;background:var(--creme)}
+.mo .c .num{font-size:13px}
+.mo .c.off{opacity:.38;background:transparent}
+.mo .c.today{outline:1.5px solid var(--sauge);outline-offset:-1.5px}
+.mo .c .v{font-size:9.5px;color:var(--or-profond);font-weight:700}
+.mo .c.empty{background:transparent}
+
+/* ---------- Clientes ---------- */
+.search{display:flex;align-items:center;gap:9px;background:var(--blanc);border:1px solid var(--bord);border-radius:13px;padding:0 13px;margin-bottom:11px;box-shadow:var(--sh)}
+.search svg{width:17px;height:17px;color:var(--encre3);stroke-width:2}
+.search input{flex:1;border:none;outline:none;background:none;min-height:47px;font-size:16px}
+.search input::placeholder{color:var(--encre3)}
+.cli{display:flex;align-items:center;gap:12px;width:100%;background:var(--blanc);border:1px solid var(--bord);border-radius:14px;padding:11px 13px;box-shadow:var(--sh);margin-bottom:8px;min-height:62px;transition:transform .12s}
+.cli:active{transform:scale(.985)}
+.avat{width:42px;height:42px;border-radius:50%;background:var(--sauge-pale);color:var(--sauge-fonce);display:flex;align-items:center;justify-content:center;font-family:"Cormorant Garamond",Georgia,serif;font-size:17px;font-weight:600;flex:none}
+.avat.gold{background:var(--or-pale);color:var(--or-profond)}
+.cli .m{flex:1;min-width:0}
+.cli .m b{display:block;font-size:15px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cli .m small{display:block;font-size:12.5px;color:var(--encre2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cli .side{text-align:right;flex:none}
+
+/* ---------- Stock ---------- */
+.prod{background:var(--blanc);border:1px solid var(--bord);border-radius:var(--r);padding:14px;box-shadow:var(--sh);margin-bottom:10px}
+.prod .top{display:flex;align-items:flex-start;gap:11px}
+.prod .ic{width:40px;height:40px;border-radius:12px;background:var(--sauge-pale);color:var(--sauge-fonce);display:flex;align-items:center;justify-content:center;flex:none}
+.prod .ic svg{width:19px;height:19px;stroke-width:1.8}
+.prod .ic.low{background:var(--or-pale);color:var(--or-profond)}
+.prod .m{flex:1;min-width:0}
+.prod .m b{font-size:15.5px}
+.prod .m small{display:block;font-size:12.5px;color:var(--encre2)}
+.prod .reste{text-align:right;flex:none}
+.prod .reste .v{font-family:"Cormorant Garamond",Georgia,serif;font-variant-numeric:lining-nums;font-size:20px;font-weight:600;line-height:1.1}
+.prod .reste small{font-size:11px;color:var(--encre2)}
+.prod .act{display:flex;gap:8px;margin-top:11px}
+.prod .act .sbtn{flex:1;min-height:42px;border-radius:11px;border:1px solid var(--bord);background:var(--creme);font-size:13.5px;font-weight:600;color:var(--sauge-fonce);display:flex;align-items:center;justify-content:center;gap:6px;transition:background .15s}
+.prod .act .sbtn:active{background:var(--sauge-pale)}
+.prod .act .sbtn svg{width:15px;height:15px;stroke-width:2.1}
+
+.gauge{height:7px;background:var(--creme2);border-radius:99px;overflow:hidden;margin:9px 0 5px}
+.gauge i{display:block;height:100%;background:var(--sauge);border-radius:99px;transition:width .5s ease}
+.gauge i.warn{background:var(--or)}
+.gauge i.ko{background:var(--rouge)}
+
+/* ---------- Cascade (argent) ---------- */
+.casc .top{padding:4px 0 13px;border-bottom:1px solid var(--creme2)}
+.casc .top .lbl{font-size:12.5px;color:var(--encre2);font-weight:600}
+.casc .top .v{font-family:"Cormorant Garamond",Georgia,serif;font-variant-numeric:lining-nums;font-size:37px;font-weight:600;line-height:1.12}
+.casc .l{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:9.5px 0;border-bottom:1px solid var(--creme2)}
+.casc .l .n{font-size:14px;font-weight:600}
+.casc .l .n small{display:block;font-size:12px;color:var(--encre2);font-weight:400}
+.casc .l .v{font-family:"Cormorant Garamond",Georgia,serif;font-variant-numeric:lining-nums;font-size:16.5px;font-weight:600}
+.casc .fin{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:13px 14px;margin-top:11px;background:var(--sauge-fonce);border-radius:13px;color:var(--creme)}
+.casc .fin .n{font-size:14px;font-weight:600}
+.casc .fin .v{font-family:"Cormorant Garamond",Georgia,serif;font-variant-numeric:lining-nums;font-size:25px;font-weight:600;color:var(--or)}
+.casc .fin.ko{background:var(--rouge)}
+.casc .fin.ko .v{color:#fff}
+
+.stats3{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px}
+.stat{background:var(--blanc);border:1px solid var(--bord);border-radius:14px;padding:11px 12px;box-shadow:var(--sh)}
+.stat .v{font-family:"Cormorant Garamond",Georgia,serif;font-variant-numeric:lining-nums;font-size:21px;font-weight:600;line-height:1.15}
+.stat .l{font-size:11.5px;color:var(--encre2);margin-top:1px}
+
+.bars{display:flex;align-items:flex-end;gap:5px;height:110px;margin-bottom:6px}
+.bars .b{flex:1;display:flex;flex-direction:column-reverse;gap:2px;height:100%;border-radius:5px 5px 0 0}
+.bars .b i{display:block;background:var(--sauge-pale);border-radius:3px;min-height:2px}
+.bars .b i.net{background:var(--or);border-radius:3px}
+.legend{display:flex;gap:14px;margin-top:7px}
+.legend s{text-decoration:none;font-size:11.5px;color:var(--encre2);display:flex;align-items:center;gap:5px}
+.legend s::before{content:'';width:9px;height:9px;border-radius:3px;background:var(--sauge-pale)}
+.legend s.or::before{background:var(--or)}
+
+.tbl{width:100%;border-collapse:collapse;font-size:13.5px}
+.tbl th{text-align:left;font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--encre2);font-weight:700;padding:0 0 7px;border-bottom:1px solid var(--creme2)}
+.tbl th:not(:first-child),.tbl td:not(:first-child){text-align:right}
+.tbl td{padding:8.5px 0;border-bottom:1px solid var(--creme2)}
+.tbl tr:last-child td{border-bottom:none}
+.tbl .nm{display:flex;align-items:center;gap:7px;font-weight:600}
+.tbl .dot{width:9px;height:9px;border-radius:50%;flex:none}
+.tbl .best{color:var(--or-profond)}
+.tbl .best-row td{background:var(--or-pale)}
+.tbl .best-row td:first-child{border-radius:9px 0 0 9px}
+.tbl .best-row td:last-child{border-radius:0 9px 9px 0}
+
+/* ---------- Notes / alertes ---------- */
+.note{background:var(--sauge-pale);border-left:3px solid var(--sauge);border-radius:10px;padding:11px 13px;font-size:13.5px;margin-bottom:12px}
+.alert{background:var(--rouge-pale);border-left:3px solid var(--rouge);border-radius:10px;padding:11px 13px;font-size:13.5px;margin-bottom:12px}
+.ok{background:var(--vert-pale);border-left:3px solid var(--vert);border-radius:10px;padding:11px 13px;font-size:13.5px;margin-bottom:12px}
+.warn-n{background:var(--or-pale);border-left:3px solid var(--or);border-radius:10px;padding:11px 13px;font-size:13.5px;margin-bottom:12px}
+
+.vide{text-align:center;padding:34px 18px;color:var(--encre2)}
+.vide svg{width:36px;height:36px;stroke-width:1.4;margin:0 auto 10px;color:var(--encre3)}
+.vide b{display:block;font-family:"Cormorant Garamond",Georgia,serif;font-size:19px;color:var(--encre);margin-bottom:3px}
+.vide span{font-size:13px}
+
+/* ---------- Formulaires ---------- */
+.f-l{display:block;font-size:12.5px;font-weight:700;color:var(--encre2);margin:15px 0 6px;letter-spacing:.02em}
+.f-l:first-child{margin-top:0}
+input.f,select.f,textarea.f{width:100%;min-height:49px;border:1px solid var(--bord-fort);border-radius:12px;background:var(--blanc);padding:0 13px;font-size:16px;outline:none;transition:border-color .15s}
+textarea.f{padding:12px 13px;min-height:86px;resize:vertical;line-height:1.5}
+input.f:focus,select.f:focus,textarea.f:focus{border-color:var(--sauge)}
+select.f{-webkit-appearance:none;appearance:none;background-image:url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%236B5F52' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 13px center;padding-right:38px}
+.f2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.f3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
+
+.btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;min-height:51px;border-radius:14px;background:var(--sauge);color:#fff;font-size:15.5px;font-weight:700;transition:filter .15s,transform .12s;text-align:center}
+.btn:active{filter:brightness(.93);transform:scale(.985)}
+.btn:disabled{opacity:.5}
+.btn svg{width:18px;height:18px;stroke-width:2.1}
+.btn.ghost{background:var(--blanc);color:var(--sauge-fonce);border:1.5px solid var(--bord-fort)}
+.btn.gold{background:var(--or);color:#fff}
+.btn.danger{background:var(--blanc);color:var(--rouge);border:1.5px solid var(--rouge-pale)}
+.btn.sm{min-height:44px;font-size:14px;border-radius:12px}
+
+/* Choix rapide (mode de paiement, statuts, etc.) */
+.paygrid{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+.pay{min-height:58px;border-radius:14px;border:1.5px solid var(--bord-fort);background:var(--blanc);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;font-size:13.5px;font-weight:700;color:var(--sauge-fonce);transition:background .15s,border-color .15s,transform .12s}
+.pay:active{transform:scale(.97)}
+.pay svg{width:20px;height:20px;stroke-width:1.9}
+.pay.on{background:var(--sauge-pale);border-color:var(--sauge)}
+.chips{display:flex;flex-wrap:wrap;gap:7px}
+.chip{min-height:44px;padding:0 15px;border-radius:99px;border:1.5px solid var(--bord-fort);background:var(--blanc);font-size:13.5px;font-weight:600;color:var(--encre);display:inline-flex;align-items:center;gap:6px;transition:background .15s,border-color .15s}
+.chip.on{background:var(--sauge-fonce);border-color:var(--sauge-fonce);color:var(--creme)}
+.chip.on.gold{background:var(--or);border-color:var(--or);color:#fff}
+
+/* Steppers (quantités) */
+.step{display:flex;align-items:center;gap:2px;background:var(--creme2);border-radius:11px;padding:2px;flex:none}
+.step button{width:40px;height:40px;border-radius:9px;background:var(--blanc);display:flex;align-items:center;justify-content:center;color:var(--sauge-fonce);box-shadow:0 1px 3px rgba(61,50,41,.08)}
+.step button:active{background:var(--sauge-pale)}
+.step button svg{width:15px;height:15px;stroke-width:2.4}
+.step .q{min-width:56px;text-align:center;font-variant-numeric:tabular-nums;font-size:14px;font-weight:700}
+.step .q small{display:block;font-size:10px;color:var(--encre2);font-weight:600;line-height:1}
+
+/* ---------- Sheet ---------- */
+.ov{position:fixed;inset:0;background:rgba(50,64,61,.42);backdrop-filter:blur(2px);-webkit-backdrop-filter:blur(2px);opacity:0;pointer-events:none;transition:opacity .28s;z-index:40}
+.ov.on{opacity:1;pointer-events:auto}
+.sheet{position:fixed;left:0;right:0;bottom:0;max-width:560px;margin:0 auto;background:var(--creme);border-radius:24px 24px 0 0;transform:translateY(102%);transition:transform .32s cubic-bezier(.32,.72,.28,1);z-index:50;max-height:90dvh;display:flex;flex-direction:column;box-shadow:0 -8px 40px rgba(61,50,41,.2)}
+.sheet.on{transform:none}
+.sheet .grab{width:40px;height:4.5px;border-radius:99px;background:var(--bord-fort);margin:9px auto 2px;flex:none}
+.sheet .sh-hd{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:8px 18px 10px;flex:none}
+.sheet .sh-hd h2{font-size:24px;line-height:1.15}
+.sheet .close{width:40px;height:40px;border-radius:50%;background:var(--creme2);display:flex;align-items:center;justify-content:center;color:var(--encre2);flex:none}
+.sheet .bd{overflow-y:auto;padding:2px 18px calc(22px + var(--safe-b));-webkit-overflow-scrolling:touch}
+
+/* ---------- FAB ---------- */
+.fab{position:fixed;right:max(16px,calc(50% - 264px));bottom:calc(var(--nav-h) + 14px);width:57px;height:57px;border-radius:50%;background:var(--sauge);color:#fff;display:flex;align-items:center;justify-content:center;box-shadow:0 6px 20px rgba(66,83,79,.4);z-index:30;transition:transform .15s}
+.fab:active{transform:scale(.92)}
+.fab svg{width:24px;height:24px;stroke-width:2.2}
+
+/* ---------- Nav ---------- */
+.nav{position:fixed;left:0;right:0;bottom:0;z-index:35;background:rgba(255,253,250,.92);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-top:1px solid var(--bord);padding-bottom:var(--safe-b)}
+.nav .in{max-width:560px;margin:0 auto;display:flex}
+.nav button{flex:1;min-height:62px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;font-size:10.5px;font-weight:700;color:var(--encre2);position:relative;transition:color .18s}
+.nav button svg{width:22px;height:22px;stroke-width:1.8;transition:transform .18s}
+.nav button.on{color:var(--sauge-fonce)}
+.nav button.on svg{transform:translateY(-1px)}
+.nav button .bd-dot{position:absolute;top:9px;right:calc(50% - 16px);width:8px;height:8px;border-radius:50%;background:var(--or);border:1.5px solid var(--blanc)}
+.nav button::before{content:'';position:absolute;top:6px;width:34px;height:34px;border-radius:11px;background:var(--sauge-pale);opacity:0;transition:opacity .18s;z-index:-1}
+.nav button.on::before{opacity:1}
+
+/* ---------- Toast ---------- */
+.toast{position:fixed;left:50%;bottom:calc(var(--nav-h) + 16px);transform:translate(-50%,14px);background:var(--sauge-nuit);color:var(--creme);padding:11px 19px;border-radius:99px;font-size:13.5px;font-weight:600;opacity:0;pointer-events:none;transition:opacity .25s,transform .25s;z-index:60;max-width:86vw;text-align:center;box-shadow:var(--sh-fort)}
+.toast.on{opacity:1;transform:translate(-50%,0)}
+
+/* ---------- Login ---------- */
+.login{max-width:390px;margin:0 auto;padding:14vh 26px 40px;text-align:center}
+.login .logo{width:64px;height:64px;margin:0 auto 18px}
+.login h1{font-size:30px;margin-bottom:4px}
+.login p{color:var(--encre2);font-size:14px;margin:0 0 26px}
+.login input.f{margin-bottom:10px;text-align:left}
+.login .err{color:var(--rouge);font-size:13.5px;margin:10px 0 0}
+
+/* ---------- Divers ---------- */
+.demo-tag{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--or-profond);background:var(--or-pale);border-radius:99px;padding:3px 10px}
+.stag{animation:stagIn .4s ease both}
+@keyframes stagIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.stag:nth-child(2){animation-delay:.04s}.stag:nth-child(3){animation-delay:.08s}
+.stag:nth-child(4){animation-delay:.12s}.stag:nth-child(5){animation-delay:.16s}
+
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none!important;transition:none!important}
+  html{scroll-behavior:auto}
+}
+@media(min-width:600px){
+  body{background:linear-gradient(160deg,#F2EBE1,#FAF6F1 45%)}
+  #app{background:var(--creme);min-height:100vh;box-shadow:0 0 60px rgba(61,50,41,.07);padding-left:22px;padding-right:22px}
+}
+</style>
+</head>
+<body>
+
+<!-- ======================= CONNEXION (mode réel) ======================= -->
+<div class="login hidden" id="login">
+  <svg class="logo" viewBox="0 0 512 512" aria-hidden="true"><rect width="512" height="512" rx="112" fill="#5A6E6A"/><g fill="none" stroke="#FAF6F1" stroke-width="20" stroke-linecap="round"><circle cx="256" cy="196" r="52"/><path d="M132 300c48-28 76-28 124-28s76 0 124 28"/><path d="M132 362c48-28 76-28 124-28s76 0 124 28"/></g><circle cx="256" cy="196" r="14" fill="#C8A04A"/></svg>
+  <h1>Mon salon</h1>
+  <p>Ton espace est protégé. Le code n’est demandé qu’une fois sur cet appareil</p>
+  <input class="f" id="lgCode" type="password" autocomplete="current-password" inputmode="numeric" placeholder="Ton code" aria-label="Ton code" style="text-align:center;letter-spacing:.35em;font-size:20px">
+  <button class="btn" id="lgBtn">Entrer</button>
+  <p class="err hidden" id="lgErr"></p>
+</div>
+
+<div id="app" class="hidden">
+
+  <!-- ======================= AUJOURD'HUI ======================= -->
+  <section class="scr" id="scr-jour">
+    <div class="hd">
+      <div class="hd-row">
+        <div>
+          <div class="over" id="jOver">Mon salon</div>
+          <h1 id="jTitle">Aujourd’hui</h1>
+          <div class="sub" id="jSub"></div>
+        </div>
+        <div class="row">
+          <span class="demo-tag hidden" id="demoTag">démo</span>
+          <button class="icobtn" id="btnReglages" aria-label="Réglages"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3.2"/><path d="M19.4 15a1.7 1.7 0 0 0 .34 1.87l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.7 1.7 0 0 0-1.87-.34 1.7 1.7 0 0 0-1.03 1.56V21a2 2 0 1 1-4 0v-.09a1.7 1.7 0 0 0-1.11-1.56 1.7 1.7 0 0 0-1.87.34l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.7 1.7 0 0 0 .34-1.87 1.7 1.7 0 0 0-1.56-1.03H3a2 2 0 1 1 0-4h.09a1.7 1.7 0 0 0 1.56-1.11 1.7 1.7 0 0 0-.34-1.87l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.7 1.7 0 0 0 1.87.34h.01A1.7 1.7 0 0 0 10 3.09V3a2 2 0 1 1 4 0v.09a1.7 1.7 0 0 0 1.03 1.56 1.7 1.7 0 0 0 1.87-.34l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.7 1.7 0 0 0-.34 1.87v.01c.26.63.87 1.04 1.56 1.04H21a2 2 0 1 1 0 4h-.09a1.7 1.7 0 0 0-1.51.94z"/></svg></button>
+        </div>
+      </div>
+    </div>
+    <div class="todo" id="jTodo"></div>
+    <div id="jHero"></div>
+    <div class="jstats" id="jStats"></div>
+    <div class="card-t" style="margin:4px 2px 9px" id="jFilT">Le fil de la journée</div>
+    <div id="jListe"></div>
+  </section>
+
+  <!-- ======================= AGENDA ======================= -->
+  <section class="scr" id="scr-agenda">
+    <div class="hd">
+      <div class="hd-row">
+        <div>
+          <div class="over">Mon salon</div>
+          <h1>Agenda</h1>
+        </div>
+        <button class="icobtn" id="aToday" aria-label="Revenir à aujourd'hui"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="5" width="17" height="16" rx="2.5"/><path d="M8 3v4M16 3v4M3.5 10h17"/><circle cx="12" cy="15.5" r="1.6" fill="currentColor" stroke="none"/></svg></button>
+      </div>
+    </div>
+    <div class="seg" id="aSeg">
+      <button data-vue="jour">Jour</button>
+      <button data-vue="semaine">Semaine</button>
+      <button data-vue="mois">Mois</button>
+    </div>
+    <div class="pernav hidden" id="aPernav">
+      <button class="arr" id="aPrev" aria-label="Période précédente"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg></button>
+      <div class="lbl" id="aLbl"></div>
+      <button class="arr" id="aNext" aria-label="Période suivante"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg></button>
+    </div>
+    <div id="aBody"></div>
+  </section>
+
+  <!-- ======================= CLIENTES ======================= -->
+  <section class="scr" id="scr-clientes">
+    <div class="hd">
+      <div class="hd-row">
+        <div>
+          <div class="over">Mon salon</div>
+          <h1>Mes clientes</h1>
+          <div class="sub" id="cliSub"></div>
+        </div>
+        <button class="icobtn" id="btnNewCli" aria-label="Nouvelle cliente"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="10" cy="8" r="3.4"/><path d="M3.5 20c0-3.3 2.9-5.4 6.5-5.4 1.5 0 2.9.37 4 1.02M18.5 14v6M15.5 17h6"/></svg></button>
+      </div>
+    </div>
+    <div class="search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.2-3.2"/></svg><input id="cliQ" type="search" placeholder="Chercher un prénom, un tél…" aria-label="Chercher une cliente"></div>
+    <div class="seg" id="cliSeg">
+      <button data-f="toutes">Toutes</button>
+      <button data-f="relancer">À relancer <span class="bdg hidden" id="cliBdg"></span></button>
+      <button data-f="fideles">Fidèles</button>
+    </div>
+    <div id="cliListe"></div>
+  </section>
+
+  <!-- ======================= STOCK ======================= -->
+  <section class="scr" id="scr-stock">
+    <div class="hd">
+      <div class="hd-row">
+        <div>
+          <div class="over">Mon salon</div>
+          <h1>Mon stock</h1>
+          <div class="sub" id="stSub"></div>
+        </div>
+        <button class="icobtn" id="btnNewProd" aria-label="Nouveau produit"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg></button>
+      </div>
+    </div>
+    <div id="stAlerte"></div>
+    <div id="stListe"></div>
+    <div class="card">
+      <div class="card-t">Ce que consomme chaque soin</div>
+      <div id="stSoins"></div>
+      <p class="tiny muted" style="margin:10px 0 0">Chaque encaissement descend le stock tout seul et compte le coût exact du soin dans tes charges. Tape un soin pour régler ses quantités</p>
+    </div>
+  </section>
+
+  <!-- ======================= ARGENT ======================= -->
+  <section class="scr" id="scr-argent">
+    <div class="hd">
+      <div class="hd-row">
+        <div>
+          <div class="over">Mon salon</div>
+          <h1 id="arTitle">Mon argent</h1>
+        </div>
+        <button class="icobtn" id="btnExport" aria-label="Exporter en CSV"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12M7.5 10.5L12 15l4.5-4.5M4.5 19.5h15"/></svg></button>
+      </div>
+    </div>
+    <div class="seg" id="arSeg">
+      <button data-vue="resultats">Résultats</button>
+      <button data-vue="charges">Charges</button>
+      <button data-vue="simu">Simulateur</button>
+    </div>
+    <div class="pernav" id="arPernav">
+      <button class="arr" id="arPrev" aria-label="Période précédente"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg></button>
+      <div class="lbl" id="arLbl"></div>
+      <button class="arr" id="arNext" aria-label="Période suivante"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg></button>
+    </div>
+    <div id="arBody"></div>
+  </section>
+
+  <!-- ======================= NAV ======================= -->
+  <button class="fab hidden" id="fab" aria-label="Ajouter une séance"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></button>
+
+  <nav class="nav"><div class="in" id="navIn">
+    <button data-tab="jour" aria-label="Aujourd'hui"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2.6M12 18.9v2.6M2.5 12h2.6M18.9 12h2.6M5.3 5.3l1.8 1.8M16.9 16.9l1.8 1.8M18.7 5.3l-1.8 1.8M7.1 16.9l-1.8 1.8"/></svg>Jour</button>
+    <button data-tab="agenda" aria-label="Agenda"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="5" width="17" height="16" rx="2.5"/><path d="M8 3v4M16 3v4M3.5 10h17"/></svg>Agenda</button>
+    <button data-tab="clientes" aria-label="Clientes"><span class="bd-dot hidden" id="dotCli"></span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3.4"/><path d="M2.5 20c0-3.3 2.9-5.4 6.5-5.4s6.5 2.1 6.5 5.4M17 4.4a3.4 3.4 0 0 1 0 7.2M18.5 14.9c2 .7 3 2.4 3 5.1"/></svg>Clientes</button>
+    <button data-tab="stock" aria-label="Stock"><span class="bd-dot hidden" id="dotStock"></span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.8l8 4v10.4l-8 4-8-4V6.8z"/><path d="M4.2 6.9L12 10.8l7.8-3.9M12 10.8V20.9"/></svg>Stock</button>
+    <button data-tab="argent" aria-label="Argent"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="6" width="19" height="13" rx="2.5"/><path d="M2.5 10h19"/><path d="M6.5 15h4"/></svg>Argent</button>
+  </div></nav>
+</div>
+
+<div class="ov" id="ov"></div>
+<div class="sheet" id="sheet" role="dialog" aria-modal="true"><div class="grab"></div><div class="sh-hd"><h2 id="shTitle"></h2><button class="close" id="shClose" aria-label="Fermer"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg></button></div><div class="bd" id="shBody"></div></div>
+<div class="toast" id="toast" role="status"></div>
+
+<script>
+/* ==========================================================================
+   CONFIGURATION
+   --------------------------------------------------------------------------
+   Laisse les 2 lignes vides pour utiliser le MODE DÉMO (données d'exemple
+   stockées dans le navigateur, rien en ligne, parfait pour essayer).
+   Pour passer en réel : colle l'URL du projet Supabase et sa clé "anon".
+   ========================================================================== */
+const CONFIG = {
+  SUPABASE_URL: 'https://rmvwxvgqbdanaporrbfk.supabase.co',
+  SUPABASE_KEY: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJtdnd4dmdxYmRhbmFwb3JyYmZrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODY1MTcyODcsImV4cCI6MjEwMjA5MzI4N30.H5B4f72rvuIeO5GP3IrOh9_-HjafuEr3rFF5KjF8uXI',
+  // ↑ clé « anon » : publique par conception, la RLS fait le vrai verrou.
+  //   Pour revoir la DÉMO : vider ces deux valeurs.
+  // L'écran d'entrée ne demande qu'un CODE : c'est le mot de passe de ces
+  // comptes Supabase (essayés dans l'ordre). Vérifié côté serveur — le code
+  // ne vit nulle part dans cette page.
+  COMPTES: ['lrthiebaut@gmail.com', 'lessecretsdegeoffrey@gmail.com'],
+};
+
+/* ========================= Utilitaires ========================= */
+const $  = s => document.querySelector(s);
+const $$ = s => [...document.querySelectorAll(s)];
+const pad = n => String(n).padStart(2,'0');
+const eur0 = new Intl.NumberFormat('fr-FR',{style:'currency',currency:'EUR',maximumFractionDigits:0});
+const eur2 = new Intl.NumberFormat('fr-FR',{style:'currency',currency:'EUR',minimumFractionDigits:2,maximumFractionDigits:2});
+const E  = v => eur0.format(Math.round(v||0));
+const E2 = v => eur2.format(v||0);
+const H  = v => (Math.round((v||0)*10)/10).toString().replace('.',',')+' h';
+const Q  = v => (Math.round((v||0)*10)/10).toString().replace('.',',');
+const esc = s => String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const uid = () => (crypto.randomUUID ? crypto.randomUUID()
+  : 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g,c=>{const r=Math.random()*16|0;return (c==='x'?r:(r&0x3|0x8)).toString(16)}));
+
+const JOURS  = ['dimanche','lundi','mardi','mercredi','jeudi','vendredi','samedi'];
+const JOURS3 = ['dim','lun','mar','mer','jeu','ven','sam'];
+const MOIS   = ['janvier','février','mars','avril','mai','juin','juillet','août','septembre','octobre','novembre','décembre'];
+const MOIS3  = ['jan','fév','mar','avr','mai','juin','juil','août','sep','oct','nov','déc'];
+
+const sod = d => new Date(d.getFullYear(), d.getMonth(), d.getDate());
+const eod = d => new Date(d.getFullYear(), d.getMonth(), d.getDate(), 23, 59, 59, 999);
+const sow = d => { const x = sod(d); x.setDate(x.getDate() - ((x.getDay()+6)%7)); return x; };   // lundi
+const eow = d => { const x = sow(d); x.setDate(x.getDate()+6); return eod(x); };
+const som = d => new Date(d.getFullYear(), d.getMonth(), 1);
+const eom = d => new Date(d.getFullYear(), d.getMonth()+1, 0, 23,59,59,999);
+const soy = d => new Date(d.getFullYear(), 0, 1);
+const eoy = d => new Date(d.getFullYear(), 11, 31, 23,59,59,999);
+const addD = (d,n) => { const x = new Date(d); x.setDate(x.getDate()+n); return x; };
+const ymd  = d => `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
+const hm   = d => `${pad(d.getHours())}:${pad(d.getMinutes())}`;
+const isoLocal = d => `${ymd(d)}T${hm(d)}:00`;
+const sameDay = (a,b) => ymd(a)===ymd(b);
+const jours = (a,b) => Math.max(0,(eod(b)-sod(a))/86400000);
+const joursDepuis = d => Math.round((sod(new Date()) - sod(new Date(d)))/86400000);
+
+/** « il y a 3 j », « il y a 5 sem », « hier »… pour parler comme une humaine. */
+function ilYa(d){
+  const n = Math.round((sod(new Date()) - sod(new Date(d)))/86400000);
+  if (n <= 0) return "aujourd'hui";
+  if (n === 1) return 'hier';
+  if (n < 14) return `il y a ${n} j`;
+  if (n < 62) return `il y a ${Math.round(n/7)} sem`;
+  return `il y a ${Math.round(n/30.4)} mois`;
+}
+const cap = s => { s = String(s||''); return s.charAt(0).toUpperCase()+s.slice(1); };
+function dansX(d){
+  const ms = new Date(d) - new Date();
+  const min = Math.round(ms/60000);
+  if (min <= 0) return 'maintenant';
+  if (min < 60) return `dans ${min} min`;
+  const h = Math.floor(min/60);
+  return `dans ${h} h${min%60 ? pad(min%60) : ''}`;
+}
+/** 06 12 34 56 78 → +33612345678 (liens SMS / WhatsApp) */
+function telIntl(t){
+  const d = String(t||'').replace(/\D/g,'');
+  if (!d) return '';
+  if (d.startsWith('33')) return '+'+d;
+  if (d.startsWith('0'))  return '+33'+d.slice(1);
+  return '+'+d;
+}
+
+function toast(msg){ const t=$('#toast'); t.textContent=msg; t.classList.add('on'); clearTimeout(t._h); t._h=setTimeout(()=>t.classList.remove('on'),2200); }
+
+/* ========================= État ========================= */
+const S = {
+  prestations: [], clientes: [], seances: [], charges: [], produits: [], consos: [], reglages: {}, bruts: [],
+  tab: 'jour',
+  aVue: 'jour', aRef: new Date(),
+  arVue: 'resultats', arPer: 'mois', arRef: new Date(),
+  simuMode: 'actuel', simuCounts: {},
+  cliFiltre: 'toutes', cliQ: '',
+};
+const REGLAGES_DEFAUT = {
+  id:1, tarif_local_h:25, arrondi_local:'reelle', battement_min:15, conso_seance:3,
+  taux_cotisations:24.6, taux_libelle:'Micro-entreprise BNC (libéral non réglementé)',
+  plafond_ca:77700, objectif_net:1800,
+  relance_jours:30,
+  relance_msg:"Coucou {prenom}, c'est Laura 🌿 Ça fait {temps} qu'on ne s'est pas vues… J'ai des créneaux ce week-end si tu as envie d'une vraie pause. Dis-moi !",
+  horaires:{'0':[10,16],'5':[14.5,20],'6':[13,20]},
+};
+
+/* ========================= Stockage ========================= */
+const CLOUD = /^https?:\/\//.test(CONFIG.SUPABASE_URL) && CONFIG.SUPABASE_KEY.length > 10;
+const LS = 'laura-salon-v2';
+const TABLES = ['prestations','clientes','seances','charges','produits','conso_prestations','reglages','evenements_bruts'];
+
+const Auth = {
+  get tok(){ try { return JSON.parse(localStorage.getItem(LS+'-auth')||'null'); } catch(e){ return null; } },
+  set tok(v){ v ? localStorage.setItem(LS+'-auth', JSON.stringify(v)) : localStorage.removeItem(LS+'-auth'); },
+  async login(email, pass){
+    const r = await fetch(`${CONFIG.SUPABASE_URL}/auth/v1/token?grant_type=password`, {
+      method:'POST', headers:{'apikey':CONFIG.SUPABASE_KEY,'Content-Type':'application/json'},
+      body: JSON.stringify({ email, password: pass })
+    });
+    const j = await r.json();
+    if (!r.ok) throw new Error(j.error_description || j.msg || j.message || 'Connexion refusée');
+    j.expires_at = Date.now() + (j.expires_in||3600)*1000;
+    Auth.tok = j; return j;
+  },
+  async refresh(){
+    const t = Auth.tok; if (!t?.refresh_token) return null;
+    const r = await fetch(`${CONFIG.SUPABASE_URL}/auth/v1/token?grant_type=refresh_token`, {
+      method:'POST', headers:{'apikey':CONFIG.SUPABASE_KEY,'Content-Type':'application/json'},
+      body: JSON.stringify({ refresh_token: t.refresh_token })
+    });
+    if (!r.ok) { Auth.tok = null; return null; }
+    const j = await r.json(); j.expires_at = Date.now() + (j.expires_in||3600)*1000;
+    Auth.tok = j; return j;
+  },
+  async valide(){
+    let t = Auth.tok; if (!t) return null;
+    if (t.expires_at && t.expires_at - Date.now() < 60000) t = await Auth.refresh();
+    return t;
+  },
+  logout(){ Auth.tok = null; location.reload(); }
+};
+
+/* Correspondance table Supabase ↔ clé d'état */
+const CLE = { conso_prestations:'consos', evenements_bruts:'bruts' };
+const cle = t => CLE[t] || t;
+
+const DB = {
+  mode: CLOUD ? 'cloud' : 'demo',
+
+  async headers(){
+    const t = await Auth.valide();
+    return { 'apikey':CONFIG.SUPABASE_KEY, 'Authorization':`Bearer ${t?.access_token||CONFIG.SUPABASE_KEY}`,
+             'Content-Type':'application/json', 'Prefer':'return=representation' };
+  },
+
+  local(){ try { return JSON.parse(localStorage.getItem(LS)||'{}'); } catch(e){ return {}; } },
+  saveLocal(d){ localStorage.setItem(LS, JSON.stringify(d)); },
+
+  async chargerTout(){
+    if (DB.mode === 'demo'){
+      let d = DB.local();
+      if (!d.prestations) { d = seedDemo(); DB.saveLocal(d); }
+      for (const t of TABLES) S[cle(t)] = d[t]||[];
+      S.reglages = Object.assign({}, REGLAGES_DEFAUT, d.reglages||{});
+      return;
+    }
+    const h = await DB.headers();
+    const q = t => fetch(`${CONFIG.SUPABASE_URL}/rest/v1/${t}?select=*`, {headers:h}).then(r=>r.ok?r.json():[]);
+    const res = await Promise.all(TABLES.map(q));
+    TABLES.forEach((t,i) => { S[cle(t)] = res[i]; });
+    S.reglages = Object.assign({}, REGLAGES_DEFAUT, (Array.isArray(S.reglages)?S.reglages[0]:S.reglages)||{});
+    if (typeof S.reglages.horaires === 'string') { try { S.reglages.horaires = JSON.parse(S.reglages.horaires); } catch(e){} }
+  },
+
+  async insert(table, row){
+    if (DB.mode === 'demo'){
+      const d = DB.local(); d[table] = d[table]||[];
+      row.id = row.id || uid(); row.created_at = row.created_at || new Date().toISOString();
+      d[table].push(row); DB.saveLocal(d);
+      S[cle(table)] = d[table];
+      return row;
+    }
+    const r = await fetch(`${CONFIG.SUPABASE_URL}/rest/v1/${table}`, {method:'POST', headers: await DB.headers(), body: JSON.stringify(row)});
+    if (!r.ok) throw new Error(await r.text());
+    const created = (await r.json())[0];
+    S[cle(table)].push(created);
+    return created;
+  },
+
+  async update(table, id, patch){
+    if (DB.mode === 'demo'){
+      const d = DB.local(); const i = (d[table]||[]).findIndex(x=>String(x.id)===String(id));
+      if (i>=0){ d[table][i] = Object.assign({}, d[table][i], patch); DB.saveLocal(d); S[cle(table)] = d[table]; return d[table][i]; }
+      return null;
+    }
+    const r = await fetch(`${CONFIG.SUPABASE_URL}/rest/v1/${table}?id=eq.${id}`, {method:'PATCH', headers: await DB.headers(), body: JSON.stringify(patch)});
+    if (!r.ok) throw new Error(await r.text());
+    const upd = (await r.json())[0];
+    const arr = S[cle(table)];
+    if (upd){ const i = arr.findIndex(x=>String(x.id)===String(id)); if (i>=0) arr[i] = upd; }
+    else S[cle(table)] = arr.filter(x=>String(x.id)!==String(id));   // supprimée depuis l'autre appareil
+    return upd;
+  },
+
+  async remove(table, id){
+    if (DB.mode === 'demo'){
+      const d = DB.local(); d[table] = (d[table]||[]).filter(x=>String(x.id)!==String(id)); DB.saveLocal(d);
+      S[cle(table)] = d[table]; return;
+    }
+    const r = await fetch(`${CONFIG.SUPABASE_URL}/rest/v1/${table}?id=eq.${id}`, {method:'DELETE', headers: await DB.headers()});
+    if (!r.ok) throw new Error(await r.text());
+    S[cle(table)] = S[cle(table)].filter(x=>String(x.id)!==String(id));
+  },
+
+  async majReglages(patch){
+    Object.assign(S.reglages, patch);
+    if (DB.mode === 'demo'){ const d = DB.local(); d.reglages = S.reglages; DB.saveLocal(d); return; }
+    const r = await fetch(`${CONFIG.SUPABASE_URL}/rest/v1/reglages?id=eq.1`, {method:'PATCH', headers: await DB.headers(), body: JSON.stringify(patch)});
+    if (!r.ok) throw new Error(await r.text());
+  }
+};
+</script>
+<script>
+/* ========================= Calculs =========================
+   Le cœur du logiciel. Si ces formules sont fausses, tout le reste ment.
+   ------------------------------------------------------------------
+   Ordre volontaire : en micro-entreprise les cotisations se calculent
+   sur le CA ENCAISSÉ, pas sur ce qui reste après charges.
+   Nouveauté v2 : les consommables ne sont plus un forfait unique mais
+   la somme de ce que CHAQUE soin utilise vraiment (mL d'huile, draps…).
+   ========================================================================= */
+const prest = id => S.prestations.find(p => String(p.id)===String(id));
+const cli   = id => S.clientes.find(c => String(c.id)===String(id));
+const prod  = id => S.produits.find(p => String(p.id)===String(id));
+const nomCli= id => { const c = cli(id); return c ? `${c.prenom}${c.nom?' '+c.nom:''}`.trim() : 'Sans nom'; };
+const court = n => { const s = String(n||'').replace(/^(?:Massage|Rituel|Les\s+Rituels)\s+/i,''); return s.charAt(0).toUpperCase()+s.slice(1); };
+const initiales = c => (c ? (c.prenom||'?').charAt(0).toUpperCase() + (c.nom||'').charAt(0).toUpperCase() : '?');
+/** « 31 unités », « 260 mL », « 13 doses » — les unités s'accordent. */
+const uTxt = (q, u) => u==='mL' ? 'mL' : (Math.abs(Number(q))>1 ? {['unité']:'unités', dose:'doses'}[u]||u : u);
+const LIB_STATUT = { prevue:'Prévue', honoree:'Encaissée', annulee:'Annulée', noshow:'Absente' };
+const LIB_PAIEMENT = { cb:'Carte', especes:'Espèces', virement:'Virement', bon_cadeau:'Bon cadeau', en_ligne:'En ligne' };
+
+const Calc = {
+
+  /** Heures de local consommées par une séance (durée du soin + battement). */
+  heuresLocal(dureeMin, r = S.reglages){
+    const h = (Number(dureeMin||0) + Number(r.battement_min||0)) / 60;
+    if (r.arrondi_local === 'heure') return Math.ceil(h);
+    if (r.arrondi_local === 'demi')  return Math.ceil(h*2)/2;
+    return h;
+  },
+  coutLocal(dureeMin, r = S.reglages){ return Calc.heuresLocal(dureeMin, r) * Number(r.tarif_local_h||0); },
+  taux(r = S.reglages){ return Number(r.taux_cotisations||0)/100; },
+
+  /* ----- Consommables : ce que chaque soin utilise vraiment ----- */
+
+  /** Prix d'une unité de produit (1 mL, 1 drap…) = prix d'un achat ÷ contenance. */
+  prixUnite(p){ return Number(p.prix_achat||0) / Math.max(0.0001, Number(p.contenance||1)); },
+
+  /** Les lignes de conso d'un soin (produits actifs uniquement). */
+  consosDe(prestationId){
+    return (S.consos||[]).filter(x =>
+      String(x.prestation_id)===String(prestationId) &&
+      Number(x.quantite||0) > 0 &&
+      (prod(x.produit_id)||{}).actif !== false);
+  },
+
+  /** Coût des consommables d'UNE séance de ce soin.
+      Tant qu'aucune liaison n'existe nulle part, on retombe sur le forfait des réglages. */
+  consoPrestation(prestationId, r = S.reglages){
+    if (!(S.consos||[]).length) return Number(r.conso_seance||0);
+    return Calc.consosDe(prestationId).reduce((a,x) => {
+      const p = prod(x.produit_id); if (!p) return a;
+      return a + Number(x.quantite||0) * Calc.prixUnite(p);
+    }, 0);
+  },
+
+  /** Coût conso moyen par séance au mix des 90 derniers jours (pour les projections). */
+  consoMoyenne(r = S.reglages){
+    const mix = Calc.mixActuel(); let t = 0;
+    for (const [pid, part] of Object.entries(mix)) t += part * Calc.consoPrestation(pid, r);
+    return t;
+  },
+
+  /** Ce qui reste d'une séance après cotisations, local et consommables. */
+  netSeance(prix, dureeMin, prestationId, r = S.reglages){
+    return Number(prix||0)*(1-Calc.taux(r)) - Calc.coutLocal(dureeMin,r) - Calc.consoPrestation(prestationId, r);
+  },
+  /** € net par heure de local occupée — le chiffre qui doit piloter le mix. */
+  netParHeure(p, r = S.reglages){
+    const h = Calc.heuresLocal(p.duree_min, r);
+    return h > 0 ? Calc.netSeance(p.prix, p.duree_min, p.id, r)/h : 0;
+  },
+
+  /* ----- Stock ----- */
+
+  /** Quantité de ce produit consommée par les séances encaissées d'une période. */
+  usageProduit(produitId, from, to){
+    let t = 0;
+    for (const s of Calc.seancesDe(from, to, ['honoree'])){
+      const l = (S.consos||[]).find(x => String(x.prestation_id)===String(s.prestation_id) && String(x.produit_id)===String(produitId));
+      if (l) t += Number(l.quantite||0);
+    }
+    return t;
+  },
+
+  /** L'état d'un produit : ce qui reste, en séances et en semaines, au rythme réel. */
+  stockInfo(p){
+    const stock = Number(p.stock||0), seuil = Number(p.seuil||0);
+    const usage28 = Calc.usageProduit(p.id, addD(new Date(),-28), new Date());
+    const nb28 = Calc.seancesDe(addD(new Date(),-28), new Date(), ['honoree'])
+      .filter(s => (S.consos||[]).some(x => String(x.prestation_id)===String(s.prestation_id) && String(x.produit_id)===String(p.id) && Number(x.quantite)>0)).length;
+    const qParSeance = nb28 > 0 ? usage28/nb28 : 0;
+    const seances  = qParSeance > 0 ? Math.max(0, Math.floor(stock/qParSeance)) : null;
+    const semaines = usage28 > 0 ? stock/(usage28/4) : null;
+    const pct = Number(p.contenance||0) > 0 ? Math.min(100, stock/Number(p.contenance)*100) : 0;
+    return { stock, seuil, usage28, qParSeance, seances, semaines, pct,
+             bas: seuil > 0 && stock <= seuil, vide: stock <= 0 };
+  },
+
+  produitsBas(){
+    return (S.produits||[]).filter(p => p.actif !== false && Calc.stockInfo(p).bas);
+  },
+
+  /** Descend (sens +1) ou remonte (sens −1) le stock pour une séance encaissée.
+      La recette du moment est mémorisée sur la séance : si Laura change les
+      quantités plus tard, l'annulation rend exactement ce qui avait été pris. */
+  async bougerStock(seance, sens){
+    let lignes;
+    if (sens < 0 && Array.isArray(seance.conso_snapshot) && seance.conso_snapshot.length){
+      lignes = seance.conso_snapshot;
+    } else {
+      lignes = (S.consos||[]).filter(x => String(x.prestation_id)===String(seance.prestation_id))
+        .map(l => ({ produit_id: l.produit_id, quantite: Number(l.quantite||0) }));
+    }
+    for (const l of lignes){
+      const p = prod(l.produit_id); if (!p) continue;
+      if (sens > 0 && p.actif === false) continue;
+      const q = Number(l.quantite||0); if (!q) continue;
+      await DB.update('produits', p.id, { stock: Math.round((Number(p.stock||0) - sens*q)*100)/100 });
+    }
+    await DB.update('seances', seance.id, { conso_snapshot: sens > 0 ? lignes : null });
+  },
+
+  /* ----- Relances : les clientes qu'il ne faut pas laisser filer ----- */
+
+  derniereVisite(clienteId){
+    let d = null;
+    for (const s of S.seances) if (s.statut==='honoree' && String(s.cliente_id)===String(clienteId)){
+      const x = new Date(s.date_heure); if (!d || x > d) d = x;
+    }
+    return d;
+  },
+  prochaineResa(clienteId){
+    const now = new Date(); let d = null;
+    for (const s of S.seances) if (s.statut==='prevue' && String(s.cliente_id)===String(clienteId)){
+      const x = new Date(s.date_heure); if (x >= now && (!d || x < d)) d = x;
+    }
+    return d;
+  },
+  /** Rythme habituel : médiane des écarts entre ses visites (≥ 3 visites). */
+  rythmeCliente(clienteId){
+    const dates = S.seances.filter(s => s.statut==='honoree' && String(s.cliente_id)===String(clienteId))
+      .map(s => sod(new Date(s.date_heure)).getTime()).sort((a,b)=>a-b);
+    if (dates.length < 3) return null;
+    const ecarts = [];
+    for (let i=1;i<dates.length;i++){ const e = (dates[i]-dates[i-1])/86400000; if (e >= 1) ecarts.push(e); }
+    if (ecarts.length < 2) return null;
+    ecarts.sort((a,b)=>a-b);
+    const mi = ecarts.length/2;
+    return Math.round(ecarts.length % 2 ? ecarts[Math.floor(mi)] : (ecarts[mi-1]+ecarts[mi])/2);
+  },
+
+  /** Le statut relance d'une cliente. `due` = à recontacter maintenant. */
+  relanceInfo(c){
+    const derniere = Calc.derniereVisite(c.id);
+    if (!derniere) return { statut:'jamais', derniere:null, jrs:null, rythme:null };
+    const jrs = joursDepuis(derniere);
+    const rythme = Calc.rythmeCliente(c.id);
+    const base = { derniere, jrs, rythme };
+    if (c.relance_off) return { statut:'off', ...base };
+    if (Calc.prochaineResa(c.id)) return { statut:'prevue', ...base };
+    if (c.derniere_relance && new Date(c.derniere_relance) > derniere) return { statut:'relancee', ...base };
+    const seuil = Number(S.reglages.relance_jours||30);
+    return { statut: jrs >= seuil ? 'due' : 'ok', ...base };
+  },
+
+  relancesDues(){
+    return S.clientes.map(c => ({ c, r: Calc.relanceInfo(c) }))
+      .filter(x => x.r.statut === 'due')
+      .sort((a,b) => b.r.jrs - a.r.jrs);
+  },
+
+  /* ----- Périodes / agrégats ----- */
+
+  heuresOuvrables(from, to, r = S.reglages){
+    const ho = r.horaires || {}; let t = 0;
+    for (let d = sod(from); d <= to; d = addD(d,1)){
+      const c = ho[String(d.getDay())];
+      if (Array.isArray(c) && c.length===2) t += Math.max(0, Number(c[1]) - Number(c[0]));
+    }
+    return t;
+  },
+  heuresOuvrablesJour(d, r = S.reglages){
+    const c = (r.horaires||{})[String(d.getDay())];
+    return (Array.isArray(c) && c.length===2) ? Math.max(0, Number(c[1])-Number(c[0])) : 0;
+  },
+
+  chargesFixes(from, to, charges = S.charges){
+    let t = 0;
+    for (const c of charges){
+      if (c.actif === false) continue;
+      const deb = c.date_debut ? new Date(c.date_debut) : null;
+      const fin = c.date_fin   ? new Date(c.date_fin)   : null;
+      if (deb && deb > to) continue;
+      if (fin && fin < from) continue;
+      /* le prorata ne compte que les jours où la charge existe vraiment */
+      const a = deb && deb > sod(from) ? sod(deb) : sod(from);
+      const b = fin && fin < to ? eod(fin) : to;
+      if (b < a) continue;
+      const nb = jours(a, b);
+      const m = Number(c.montant||0);
+      if (c.type === 'fixe_mensuelle')      t += m * nb / 30.4375;
+      else if (c.type === 'fixe_annuelle')  t += m * nb / 365;
+      else if (c.type === 'ponctuelle'){ if (deb && deb >= sod(from) && deb <= to) t += m; }
+    }
+    return t;
+  },
+
+  seancesDe(from, to, statuts = null){
+    return S.seances.filter(s => {
+      const d = new Date(s.date_heure);
+      if (d < sod(from) || d > to) return false;
+      return statuts ? statuts.includes(s.statut) : true;
+    });
+  },
+
+  /** Le bloc complet d'une période. */
+  periode(from, to){
+    const r = S.reglages;
+    const toutes  = Calc.seancesDe(from, to);
+    const honorees = toutes.filter(s => s.statut === 'honoree');
+
+    const ca    = honorees.reduce((a,s)=>a+Number(s.prix_facture||0), 0);
+    const cotis = ca * Calc.taux(r);
+    const local = honorees.reduce((a,s)=>a+Calc.coutLocal(s.duree_min, r), 0);
+    const conso = honorees.reduce((a,s)=>a+Calc.consoPrestation(s.prestation_id, r), 0);
+    const fixes = Calc.chargesFixes(from, to);
+    const net   = ca - cotis - local - conso - fixes;
+
+    const hVendues   = honorees.reduce((a,s)=>a+Calc.heuresLocal(s.duree_min, r), 0);
+    const hOuvrables = Calc.heuresOuvrables(from, to, r);
+
+    const parP = {};
+    for (const s of honorees){
+      const p = prest(s.prestation_id);
+      const k = p ? p.id : 'autre';
+      parP[k] = parP[k] || { prestation:p, nom:p?p.nom:'Autre', couleur:p?p.couleur:'#9A8D7E', nb:0, ca:0, heures:0, net:0 };
+      parP[k].nb++;
+      parP[k].ca    += Number(s.prix_facture||0);
+      parP[k].heures+= Calc.heuresLocal(s.duree_min, r);
+      parP[k].net   += Calc.netSeance(s.prix_facture, s.duree_min, s.prestation_id, r);
+    }
+    const prestations = Object.values(parP).map(x => Object.assign(x, { netH: x.heures>0 ? x.net/x.heures : 0 }))
+                                           .sort((a,b)=>b.ca-a.ca);
+
+    return {
+      from, to, toutes, honorees,
+      nb: honorees.length,
+      nbPrevues: toutes.filter(s=>s.statut==='prevue').length,
+      nbAnnulees: toutes.filter(s=>s.statut==='annulee'||s.statut==='noshow').length,
+      ca, cotis, local, conso, fixes, net,
+      panier: honorees.length ? ca/honorees.length : 0,
+      hVendues, hOuvrables,
+      remplissage: hOuvrables>0 ? hVendues/hOuvrables*100 : 0,
+      prestations
+    };
+  },
+
+  caGlissant(ref = new Date()){
+    const from = new Date(ref); from.setFullYear(from.getFullYear()-1);
+    return S.seances.filter(s => s.statut==='honoree' && new Date(s.date_heure) > from)
+                    .reduce((a,s)=>a+Number(s.prix_facture||0), 0);
+  },
+
+  /** Mix réel des 90 derniers jours → proportions par prestation. */
+  mixActuel(){
+    const from = addD(new Date(), -90);
+    const h = S.seances.filter(s => s.statut==='honoree' && new Date(s.date_heure) >= from);
+    const c = {};
+    for (const s of h) c[s.prestation_id] = (c[s.prestation_id]||0)+1;
+    const tot = Object.values(c).reduce((a,b)=>a+b,0);
+    if (!tot){
+      const act = S.prestations.filter(p=>p.actif!==false);
+      const o = {}; act.forEach(p => o[p.id] = 1/act.length); return o;
+    }
+    const o = {}; for (const k in c) o[k] = c[k]/tot; return o;
+  },
+
+  /** Combien de séances pour atteindre `objectif` € net sur la période. */
+  simuler(objectif, proportions, from, to){
+    const r = S.reglages;
+    const fixes = Calc.chargesFixes(from, to);
+    let netMoyen = 0, heuresMoyen = 0;
+    for (const [pid, part] of Object.entries(proportions)){
+      const p = prest(pid); if (!p) continue;
+      netMoyen    += part * Calc.netSeance(p.prix, p.duree_min, p.id, r);
+      heuresMoyen += part * Calc.heuresLocal(p.duree_min, r);
+    }
+    const hOuvrables = Calc.heuresOuvrables(from, to, r);
+    if (netMoyen <= 0) return { possible:false, netMoyen, nb:0, heures:0, hOuvrables, ca:0, net:0, repartition:[] };
+
+    let nb = Math.ceil((Number(objectif||0) + fixes) / netMoyen);
+    let repartition, net, garde = 0;
+    /* l'arrondi de la répartition peut faire manquer l'objectif de quelques euros :
+       on ajoute des séances jusqu'à ce que le net promis soit vraiment atteint */
+    do {
+      repartition = Calc.repartir(nb, proportions);
+      net = repartition.reduce((a,x)=>a + x.n*Calc.netSeance(x.prestation.prix, x.prestation.duree_min, x.prestation.id, r), 0) - fixes;
+      if (net >= Number(objectif||0) || garde++ >= 5) break;
+      nb++;
+    } while (true);
+    const ca     = repartition.reduce((a,x)=>a + x.n*Number(x.prestation.prix), 0);
+    const heures = repartition.reduce((a,x)=>a + x.n*Calc.heuresLocal(x.prestation.duree_min, r), 0);
+
+    return { possible:true, netMoyen, nb, heures, hOuvrables, ca, net, fixes, repartition,
+             remplissage: hOuvrables>0 ? heures/hOuvrables*100 : 0 };
+  },
+
+  /** Répartit n séances selon des proportions (méthode du plus fort reste). */
+  repartir(n, proportions){
+    const lignes = [];
+    for (const [pid, part] of Object.entries(proportions)){
+      const p = prest(pid); if (!p || part<=0) continue;
+      lignes.push({ prestation:p, exact:n*part, n:Math.floor(n*part) });
+    }
+    let reste = n - lignes.reduce((a,l)=>a+l.n, 0);
+    lignes.sort((a,b)=>(b.exact-b.n)-(a.exact-a.n));
+    for (let i=0; i<reste && lignes.length; i++) lignes[i % lignes.length].n++;
+    return lignes.filter(l=>l.n>0).sort((a,b)=>b.n-a.n);
+  },
+
+  /** Le plafond : ce qu'elle gagnerait en remplissant toutes ses heures. */
+  maximum(proportions, from, to){
+    const r = S.reglages;
+    const hOuvrables = Calc.heuresOuvrables(from, to, r);
+    let heuresMoyen = 0, netMoyen = 0;
+    for (const [pid, part] of Object.entries(proportions)){
+      const p = prest(pid); if (!p) continue;
+      heuresMoyen += part * Calc.heuresLocal(p.duree_min, r);
+      netMoyen    += part * Calc.netSeance(p.prix, p.duree_min, p.id, r);
+    }
+    if (heuresMoyen <= 0) return { nb:0, net:0, hOuvrables };
+    const nb = Math.floor(hOuvrables / heuresMoyen);
+    return { nb, net: nb*netMoyen - Calc.chargesFixes(from, to), hOuvrables };
+  },
+
+  bornes(per, ref){
+    if (per === 'semaine') return [sow(ref), eow(ref)];
+    if (per === 'annee')   return [soy(ref), eoy(ref)];
+    return [som(ref), eom(ref)];
+  },
+  libelle(per, ref){
+    if (per === 'semaine'){ const a = sow(ref), b = eow(ref);
+      return `${a.getDate()} ${MOIS3[a.getMonth()]} – ${b.getDate()} ${MOIS3[b.getMonth()]}`; }
+    if (per === 'annee') return String(ref.getFullYear());
+    return `${cap(MOIS[ref.getMonth()])} ${ref.getFullYear()}`;
+  }
+};
+
+/** Message de relance prêt à envoyer, variables remplies. */
+function messageRelance(c){
+  const r = Calc.relanceInfo(c);
+  const lastS = S.seances.filter(s => s.statut==='honoree' && String(s.cliente_id)===String(c.id))
+    .sort((a,b)=>new Date(b.date_heure)-new Date(a.date_heure))[0];
+  const p = lastS ? prest(lastS.prestation_id) : null;
+  let temps = 'un moment';
+  if (r.jrs != null){
+    if (r.jrs < 62){ const w = Math.max(1, Math.round(r.jrs/7)); temps = `${w} semaine${w>1?'s':''}`; }
+    else temps = `${Math.round(r.jrs/30.4)} mois`;
+  }
+  return String(S.reglages.relance_msg||REGLAGES_DEFAUT.relance_msg)
+    .replaceAll('{prenom}', c.prenom||'')
+    .replaceAll('{soin}', p ? court(p.nom) : 'soin')
+    .replaceAll('{temps}', temps);
+}
+</script>
+<script>
+/* ========================= Helpers de rendu ========================= */
+const ICO = {
+  bell:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8.5a6 6 0 1 0-12 0c0 6-2.5 7.5-2.5 7.5h17S18 14.5 18 8.5"/><path d="M10 20a2.2 2.2 0 0 0 4 0"/></svg>',
+  box:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.8l8 4v10.4l-8 4-8-4V6.8z"/><path d="M4.2 6.9L12 10.8l7.8-3.9M12 10.8V20.9"/></svg>',
+  inbox:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12h-5.5l-1.5 2.5h-4L8.5 12H3"/><path d="M5 5.5h14l2 6.5v6.5H3V12z"/></svg>',
+  euro:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M17.5 5.6A7.4 7.4 0 0 0 6.9 8.4a7.6 7.6 0 0 0 0 7.2 7.4 7.4 0 0 0 10.6 2.8"/><path d="M3.5 10.4h9M3.5 13.6h9"/></svg>',
+  chev:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>',
+  check:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>',
+  plus:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>',
+  phone:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.13.96.36 1.9.7 2.8a2 2 0 0 1-.45 2.1L8.1 9.9a16 16 0 0 0 6 6l1.3-1.27a2 2 0 0 1 2.1-.45c.9.34 1.84.57 2.8.7a2 2 0 0 1 1.7 2z"/></svg>',
+  msg:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.4 8.4 0 0 1-9 8.4 8.9 8.9 0 0 1-3.9-.9L3 20l1-4.9a8.4 8.4 0 1 1 17-3.6z"/></svg>',
+  wa:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a9 9 0 0 0-7.8 13.5L3 21l4.7-1.2A9 9 0 1 0 12 3z"/><path d="M8.7 8.6c.3-.7.6-.7 1-.7h.7c.2 0 .5 0 .7.6s.8 2 .8 2-.4.7-.6 1c-.2.2 0 .6.4 1.1a7 7 0 0 0 2.3 1.9c.5.2.8.2 1-.1l.8-1c.2-.3.5-.2.8-.1l1.8.9c.3.2.5.3.5.5a2.4 2.4 0 0 1-1.6 2.2c-.7.2-1.6.3-4-.7a10.5 10.5 0 0 1-4.6-4.3c-.8-1.3-.9-2.4-.6-3.1z"/></svg>',
+  drop:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.7s6.5 7 6.5 12A6.5 6.5 0 0 1 5.5 14.7c0-5 6.5-12 6.5-12z"/></svg>',
+  layers:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l9 4.8-9 4.8-9-4.8z"/><path d="M3 12.6l9 4.8 9-4.8M3 17.2l9 4.8 9-4.8" opacity=".55"/></svg>',
+  cart:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="20" r="1.6"/><circle cx="17.5" cy="20" r="1.6"/><path d="M2.5 3.5h2.2l2.5 12h11.4l2.4-8.5H6"/></svg>',
+  pen:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3.5a2.3 2.3 0 0 1 3.5 3.5L8 19.5 3.5 20.5 4.5 16z"/></svg>',
+  cal:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="5" width="17" height="16" rx="2.5"/><path d="M8 3v4M16 3v4M3.5 10h17"/></svg>',
+  user:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="3.6"/><path d="M4.5 20.5c0-3.5 3.1-5.8 7.5-5.8s7.5 2.3 7.5 5.8"/></svg>',
+  spark:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.9 5.6L19.5 10l-5.6 1.9L12 17.5l-1.9-5.6L4.5 10l5.6-1.4z"/></svg>',
+};
+
+function vide(titre, sous, ico = ICO.spark){
+  return `<div class="vide">${ico}<b>${titre}</b>${sous?`<span>${sous}</span>`:''}</div>`;
+}
+
+function carteSeance(s, opts = {}){
+  const p = prest(s.prestation_id), d = new Date(s.date_heure);
+  const finie = s.statut !== 'prevue';
+  /* opts.date : dans une fiche cliente, la date remplace le prénom (on sait déjà qui c'est) */
+  const titre = opts.date ? `${cap(JOURS3[d.getDay()])} ${d.getDate()} ${MOIS3[d.getMonth()]}` : esc(nomCli(s.cliente_id));
+  return `<button class="seance ${finie&&!opts.plein?'passee':''}" data-seance="${s.id}">
+    <span class="bar-c" style="background:${p?p.couleur:'#9A8D7E'}"></span>
+    <span class="h">${hm(d)}</span>
+    <span class="m"><b>${titre}</b><span>${esc(p?court(p.nom):'Soin')} · ${s.duree_min} min${s.mode_paiement?` · ${LIB_PAIEMENT[s.mode_paiement]||''}`:''}</span></span>
+    <span class="p"><span class="v">${E(s.prix_facture)}</span><br><span class="pill ${s.statut}">${LIB_STATUT[s.statut]}</span></span>
+  </button>`;
+}
+
+/* ========================= Écran : Aujourd'hui ========================= */
+function rendreJour(){
+  const d = new Date();
+  const fermeAuj = Calc.heuresOuvrablesJour(d) === 0;
+  $('#jSub').textContent = `${JOURS[d.getDay()]} ${d.getDate()} ${MOIS[d.getMonth()]}${fermeAuj?' · salon fermé':''}`;
+
+  /* ---- À faire ---- */
+  const todo = [];
+  const dues = Calc.relancesDues();
+  if (dues.length) todo.push({ ic:'sauge', svg:ICO.bell, tab:'clientes', filtre:'relancer',
+    b:`${dues.length} cliente${dues.length>1?'s':''} à relancer`,
+    s: dues.slice(0,3).map(x=>x.c.prenom).join(', ') + (dues.length>3?'…':'') });
+  const bas = Calc.produitsBas();
+  for (const p of bas){
+    const si = Calc.stockInfo(p);
+    todo.push({ ic:'or', svg:ICO.box, tab:'stock',
+      b:`Stock bas : ${p.libelle}`,
+      s: si.seances != null ? `encore ~${si.seances} séance${si.seances>1?'s':''}, pense à recommander` : `${Q(si.stock)} ${p.unite||''} en stock, pense à recommander` });
+  }
+  const retard = S.seances.filter(s => s.statut==='prevue' && new Date(s.date_heure).getTime() + s.duree_min*60000 < Date.now());
+  if (retard.length) todo.push({ ic:'sauge', svg:ICO.euro, act:'retard',
+    b:`${retard.length} séance${retard.length>1?'s':''} passée${retard.length>1?'s':''} à encaisser`,
+    s:'un tap sur chacune et tes chiffres sont justes' });
+  const bruts = S.bruts.filter(b=>!b.traite);
+  if (bruts.length) todo.push({ ic:'rouge', svg:ICO.inbox, act:'inbox',
+    b:`${bruts.length} réservation${bruts.length>1?'s':''} reçue${bruts.length>1?'s':''} à confirmer`,
+    s:`arrivée${bruts.length>1?'s':''} depuis ton site` });
+  $('#jTodo').innerHTML = todo.map((t,i)=>`<button class="todo-it stag" data-todo="${i}">
+      <span class="ic ${t.ic}">${t.svg}</span>
+      <span class="tx"><b>${esc(t.b)}</b><small>${esc(t.s)}</small></span>${ICO.chev}
+    </button>`).join('');
+  $('#jTodo')._todo = todo;
+
+  /* ---- Prochaine cliente ---- */
+  const now = new Date();
+  const dujour = Calc.seancesDe(sod(d), eod(d)).sort((a,b)=>new Date(a.date_heure)-new Date(b.date_heure));
+  const proch = dujour.find(s => s.statut==='prevue' && new Date(s.date_heure).getTime() + s.duree_min*60000 > now.getTime());
+  if (proch){
+    const c = cli(proch.cliente_id), p = prest(proch.prestation_id);
+    const deb = new Date(proch.date_heure);
+    const enCours = deb <= now;
+    $('#jHero').innerHTML = `<div class="hero stag">
+      <div class="over">${enCours?'<span class="dotl"></span>En ce moment':'Ta prochaine cliente'}</div>
+      <div class="qui">
+        <span class="avat">${initiales(c)}</span>
+        <div><div class="nom">${esc(c?c.prenom:'Sans nom')}${c&&c.nom?` <span style="font-size:17px;opacity:.7">${esc(c.nom)}</span>`:''}</div>
+        <div class="soin">${esc(p?p.nom:'Soin')} · ${proch.duree_min} min · ${E(proch.prix_facture)}</div></div>
+        <div class="quand"><div class="h">${hm(deb)}</div><small>${enCours?'en cours':dansX(deb)}</small></div>
+      </div>
+      ${c && c.notes ? `<div class="note">${esc(c.notes)}</div>` : ''}
+      <div class="act">
+        <button class="hbtn gold" data-encaisser="${proch.id}">${ICO.check}Encaisser</button>
+        ${c?`<button class="hbtn" data-fiche="${c.id}">${ICO.user}Sa fiche</button>`:''}
+      </div>
+    </div>`;
+  } else $('#jHero').innerHTML = '';
+
+  /* ---- Chiffres du jour ---- */
+  const st = Calc.periode(sod(d), eod(d));
+  const prevues = st.toutes.filter(s=>s.statut==='prevue');
+  const aVenir  = prevues.reduce((a,s)=>a+Number(s.prix_facture||0),0);
+  const netJour = st.ca - st.cotis - st.local - st.conso;
+  $('#jStats').innerHTML = `
+    <div class="jstat stag"><div class="v">${E(st.ca)}</div><div class="l">Encaissé</div></div>
+    <div class="jstat stag"><div class="v">${E(aVenir)}</div><div class="l">Encore prévu</div></div>
+    <div class="jstat gold stag"><div class="v">${E(netJour)}</div><div class="l">Net dans ta poche</div></div>`;
+
+  /* ---- Le fil ---- */
+  const ferme = Calc.heuresOuvrablesJour(d) === 0;
+  if (dujour.length){
+    $('#jFilT').textContent = 'Le fil de la journée';
+    $('#jListe').innerHTML = dujour.map(s=>carteSeance(s)).join('');
+  } else {
+    /* journée vide : on montre la prochaine journée qui compte */
+    let apercu = null;
+    for (let i=1; i<=14 && !apercu; i++){
+      const dd = addD(d, i);
+      const ss = Calc.seancesDe(sod(dd), eod(dd)).filter(s=>s.statut==='prevue')
+        .sort((a,b)=>new Date(a.date_heure)-new Date(b.date_heure));
+      if (ss.length) apercu = { dd, ss };
+    }
+    if (apercu){
+      $('#jFilT').textContent = `${cap(JOURS[apercu.dd.getDay()])} ${apercu.dd.getDate()} ${MOIS3[apercu.dd.getMonth()]} t’attend`;
+      $('#jListe').innerHTML = apercu.ss.map(s=>carteSeance(s)).join('');
+    } else {
+      $('#jFilT').textContent = 'Le fil de la journée';
+      $('#jListe').innerHTML = ferme
+        ? vide('Salon fermé aujourd’hui', 'Rien de prévu sur les prochains jours ouverts')
+        : vide('Rien de prévu aujourd’hui', 'Le bouton + ajoute une séance en quelques taps');
+    }
+  }
+}
+
+/* ========================= Écran : Agenda ========================= */
+function rendreAgenda(){
+  $$('#aSeg button').forEach(b=>b.classList.toggle('on', b.dataset.vue===S.aVue));
+  $('#aPernav').classList.toggle('hidden', S.aVue==='jour');
+  if (S.aVue==='jour') rendreAgendaJour();
+  else if (S.aVue==='semaine') rendreAgendaSemaine();
+  else rendreAgendaMois();
+}
+
+function rendreAgendaJour(){
+  const sel = S.aRef;
+  let strip = '<div class="strip">';
+  for (let i=-2;i<=11;i++){
+    const d = addD(new Date(), i);
+    const ss = Calc.seancesDe(sod(d), eod(d)).filter(s=>s.statut!=='annulee');
+    const ouvre = Calc.heuresOuvrablesJour(d) > 0;
+    strip += `<button class="dbtn ${ouvre?'':'off'} ${sameDay(d,sel)?'on':''} ${sameDay(d,new Date())?'today':''}" data-jour="${ymd(d)}">
+      <span class="dn">${JOURS3[d.getDay()]}</span><span class="dd">${d.getDate()}</span>
+      <span class="dot ${ss.length?'':'none'}"></span></button>`;
+  }
+  strip += '</div>';
+
+  const r = S.reglages;
+  const plage = (r.horaires||{})[String(sel.getDay())];
+  const ss = Calc.seancesDe(sod(sel), eod(sel)).sort((a,b)=>new Date(a.date_heure)-new Date(b.date_heure));
+  let h0 = plage ? Math.floor(plage[0]) : 9;
+  let h1 = plage ? Math.ceil(plage[1]) : 19;
+  for (const s of ss){
+    const d = new Date(s.date_heure), a = d.getHours()+d.getMinutes()/60;
+    h0 = Math.min(h0, Math.floor(a)); h1 = Math.max(h1, Math.ceil(a + s.duree_min/60));
+  }
+  const PX = 76, top = 10, hTot = (h1-h0)*PX + top + 12;
+  let tl = `<div class="tl" style="height:${hTot}px">`;
+  for (let h=h0; h<=h1; h++){
+    tl += `<div class="hr" style="top:${top+(h-h0)*PX}px"></div><div class="hlbl" style="top:${top+(h-h0)*PX}px">${h} h</div>`;
+  }
+  if (plage){
+    if (plage[0] > h0) tl += `<div class="closed" style="top:${top}px;height:${(plage[0]-h0)*PX}px"></div>`;
+    if (plage[1] < h1) tl += `<div class="closed" style="top:${top+(plage[1]-h0)*PX}px;height:${(h1-plage[1])*PX}px"></div>`;
+  } else tl += `<div class="closed" style="top:${top}px;height:${(h1-h0)*PX}px"></div>`;
+
+  /* Créneaux libres tapables (dans les horaires, hors séances + battement) */
+  if (plage){
+    const busy = ss.filter(s=>s.statut!=='annulee' && s.statut!=='noshow')
+      .map(s => { const d=new Date(s.date_heure), a=d.getHours()+d.getMinutes()/60;
+                  return [a, a + (s.duree_min + Number(r.battement_min||0))/60]; })
+      .sort((a,b)=>a[0]-b[0]);
+    let cur = plage[0];
+    const libres = [];
+    for (const [a,b] of busy){ if (a - cur >= 0.5) libres.push([cur, Math.min(a, plage[1])]); cur = Math.max(cur, b); }
+    if (plage[1] - cur >= 0.5) libres.push([cur, plage[1]]);
+    for (const [a,b] of libres){
+      if (b <= a) continue;
+      const deb = Math.ceil(a*4)/4;
+      tl += `<button class="slot" style="top:${top+(a-h0)*PX+2}px;height:${(b-a)*PX-5}px;border-color:rgba(212,196,176,.55);color:rgba(154,141,126,.6)" data-libre="${ymd(sel)}T${pad(Math.floor(deb))}:${pad(Math.round((deb%1)*60))}" aria-label="Ajouter une séance à ${Math.floor(deb)} h">${ICO.plus}</button>`;
+    }
+  }
+
+  for (const s of ss){
+    const p = prest(s.prestation_id), d = new Date(s.date_heure);
+    const a = d.getHours()+d.getMinutes()/60;
+    const cc = p ? p.couleur : '#9A8D7E';
+    const off = s.statut==='annulee' || s.statut==='noshow';
+    tl += `<button class="blk" data-seance="${s.id}"
+      style="top:${top+(a-h0)*PX+1.5}px;height:${Math.max(30, s.duree_min/60*PX-4)}px;background:${cc}${off?'14':'26'};border-left:3.5px solid ${cc};${off?'opacity:.55;':''}">
+      <b style="${off?'text-decoration:line-through;':''}">${esc(nomCli(s.cliente_id))}</b>
+      <small>${hm(d)} · ${esc(p?court(p.nom):'Soin')}${off?` · ${LIB_STATUT[s.statut].toLowerCase()}`:''}</small>
+      ${s.statut==='honoree'?`<span class="pmark" style="color:${cc}">${ICO.check}</span>`:''}
+    </button>`;
+  }
+  if (sameDay(sel, new Date())){
+    const nowH = new Date().getHours() + new Date().getMinutes()/60;
+    if (nowH >= h0 && nowH <= h1) tl += `<div class="now" style="top:${top+(nowH-h0)*PX}px"></div>`;
+  }
+  tl += '</div>';
+
+  const st = Calc.periode(sod(sel), eod(sel));
+  const titre = sameDay(sel,new Date()) ? "Aujourd’hui" : `${cap(JOURS[sel.getDay()])} ${sel.getDate()} ${MOIS3[sel.getMonth()]}`;
+  const entete = `<div class="between" style="margin:2px 2px 10px"><b class="serif" style="font-size:20px">${titre}</b>
+       <span class="mini">${st.toutes.length?`${st.toutes.length} séance${st.toutes.length>1?'s':''} · ${E(st.ca)} encaissé${st.ca>1?'s':''}`:(plage?'journée libre':'salon fermé')}</span></div>`;
+  /* Un jour fermé et vide n'a pas besoin d'une grande grille : une carte suffit */
+  $('#aBody').innerHTML = strip + entete + ((!plage && !ss.length)
+    ? `<div class="card">${vide('Salon fermé ce jour-là', 'Tes horaires se règlent dans les réglages', ICO.cal)}</div>`
+    : tl);
+}
+
+function rendreAgendaSemaine(){
+  const [from, to] = Calc.bornes('semaine', S.aRef);
+  $('#aLbl').textContent = Calc.libelle('semaine', S.aRef);
+  const st = Calc.periode(from, to);
+  const a = sow(S.aRef); let wk = '<div class="wk">';
+  for (let i=0;i<7;i++){
+    const d = addD(a,i), ouvre = Calc.heuresOuvrablesJour(d) > 0;
+    const ss = Calc.seancesDe(sod(d), eod(d)).filter(s=>s.statut!=='annulee');
+    const ca = ss.filter(s=>s.statut==='honoree').reduce((x,s)=>x+Number(s.prix_facture||0),0);
+    wk += `<div class="d ${ouvre?'':'off'} ${sameDay(d,new Date())?'today':''}">
+      <div class="dn">${JOURS3[d.getDay()]}</div><div class="dd">${d.getDate()}</div>
+      <div class="dc">${ss.length?(ca?E(ca):ss.length+'×'):''}</div></div>`;
+  }
+  wk += '</div>';
+  const pct = Math.min(100, st.remplissage);
+  const carte = `<div class="card tight">
+    <div class="between"><span class="tiny muted">Semaine</span><b class="num" style="font-size:20px">${E(st.ca)}</b></div>
+    <div class="gauge"><i class="${st.remplissage>=80?'ko':st.remplissage>=55?'':'warn'}" style="width:${pct}%"></i></div>
+    <div class="between"><span class="mini">${H(st.hVendues)} vendues sur ${H(st.hOuvrables)} ouvrables</span><span class="mini">${Math.round(st.remplissage)} %</span></div>
+  </div>`;
+  const ss = st.toutes.slice().sort((x,y)=>new Date(x.date_heure)-new Date(y.date_heure));
+  let out = '', jc = '';
+  for (const s of ss){
+    const d = new Date(s.date_heure), k = ymd(d);
+    if (k !== jc){ jc = k; out += `<div class="sec-t">${JOURS[d.getDay()]} ${d.getDate()} ${MOIS3[d.getMonth()]}</div>`; }
+    out += carteSeance(s);
+  }
+  $('#aBody').innerHTML = wk + carte + (out || vide('Semaine vide', 'Tape un jour dans la vue Jour pour ajouter une séance'));
+}
+
+function rendreAgendaMois(){
+  $('#aLbl').textContent = Calc.libelle('mois', S.aRef);
+  const [from, to] = Calc.bornes('mois', S.aRef);
+  const st = Calc.periode(from, to);
+  const d1 = som(S.aRef), dec = (d1.getDay()+6)%7, nbj = eom(S.aRef).getDate();
+  let h = '<div class="card tight"><div class="mo">';
+  for (let i=0;i<dec;i++) h += '<div class="c empty"></div>';
+  for (let j=1;j<=nbj;j++){
+    const d = new Date(S.aRef.getFullYear(), S.aRef.getMonth(), j);
+    const ouvre = Calc.heuresOuvrablesJour(d) > 0;
+    const ca = Calc.seancesDe(sod(d), eod(d), ['honoree']).reduce((x,s)=>x+Number(s.prix_facture||0),0);
+    h += `<div class="c ${ouvre?'':'off'} ${sameDay(d,new Date())?'today':''}">
+      <span class="num">${j}</span>${ca?`<span class="v">${Math.round(ca)}</span>`:''}</div>`;
+  }
+  h += '</div></div>';
+  h += `<div class="card"><div class="card-t">Le mois en bref</div>
+    <div class="lst">
+      <div class="it"><div class="m"><b>${st.nb} séance${st.nb>1?'s':''} encaissée${st.nb>1?'s':''}</b><small>${st.nbPrevues} encore prévue${st.nbPrevues>1?'s':''} · ${st.nbAnnulees} annulée${st.nbAnnulees>1?'s':''} ou absente${st.nbAnnulees>1?'s':''}</small></div><div class="v">${E(st.ca)}</div></div>
+      <div class="it"><div class="m"><b>Panier moyen</b><small>par séance encaissée</small></div><div class="v">${E(st.panier)}</div></div>
+      <div class="it"><div class="m"><b>Heures occupées</b><small>battement compris — ${Math.round(st.remplissage)} % de remplissage</small></div><div class="v">${H(st.hVendues)}</div></div>
+    </div></div>`;
+  $('#aBody').innerHTML = h;
+}
+
+/* ========================= Écran : Clientes ========================= */
+function statsCliente(id){
+  const ss = S.seances.filter(s => String(s.cliente_id)===String(id));
+  const hon = ss.filter(s=>s.statut==='honoree');
+  const ca = hon.reduce((a,s)=>a+Number(s.prix_facture||0),0);
+  return { nb:hon.length, ca, panier: hon.length?ca/hon.length:0,
+           absences: ss.filter(s=>s.statut==='noshow').length };
+}
+
+function rendreClientes(){
+  const dues = Calc.relancesDues();
+  $('#cliBdg').textContent = dues.length;
+  $('#cliBdg').classList.toggle('hidden', !dues.length);
+  $('#dotCli').classList.toggle('hidden', !dues.length);
+  $$('#cliSeg button').forEach(b=>b.classList.toggle('on', b.dataset.f===S.cliFiltre));
+  $('#cliSub').textContent = `${S.clientes.length} cliente${S.clientes.length>1?'s':''}${dues.length?` · ${dues.length} à relancer`:''}`;
+
+  const q = S.cliQ.trim().toLowerCase();
+  let liste = S.clientes.slice();
+  if (q) liste = liste.filter(c =>
+    (c.prenom+' '+(c.nom||'')).toLowerCase().includes(q) ||
+    String(c.tel||'').replace(/\s/g,'').includes(q.replace(/\s/g,'')) ||
+    String(c.email||'').toLowerCase().includes(q));
+
+  const infos = new Map(liste.map(c => [c.id, Calc.relanceInfo(c)]));
+  if (S.cliFiltre==='relancer') liste = liste.filter(c => infos.get(c.id).statut==='due');
+  if (S.cliFiltre==='fideles')  liste = liste.filter(c => statsCliente(c.id).nb >= 5);
+
+  liste.sort((a,b)=>{
+    const ra = infos.get(a.id), rb = infos.get(b.id);
+    if (S.cliFiltre==='relancer') return rb.jrs - ra.jrs;
+    if (S.cliFiltre==='fideles')  return statsCliente(b.id).nb - statsCliente(a.id).nb;
+    const da = ra.derniere ? ra.derniere.getTime() : 0, db = rb.derniere ? rb.derniere.getTime() : 0;
+    return db - da || a.prenom.localeCompare(b.prenom);
+  });
+
+  $('#cliListe').innerHTML = liste.length ? liste.map(c=>{
+    const r = infos.get(c.id), stc = statsCliente(c.id);
+    let ligne;
+    if (!r.derniere) ligne = 'Jamais venue pour l’instant';
+    else {
+      ligne = `Venue ${ilYa(r.derniere)}`;
+      if (r.rythme) ligne += ` · rythme ${r.rythme >= 12 ? Math.round(r.rythme/7)+' sem' : r.rythme+' j'}`;
+    }
+    const resa = Calc.prochaineResa(c.id);
+    let droite = `<span class="mini">${stc.nb} soin${stc.nb>1?'s':''}</span>`;
+    if (r.statut==='due') droite = `<span class="pill due">À relancer</span>`;
+    else if (resa) droite = `<span class="mini" style="color:var(--sauge);font-weight:700">RDV ${JOURS3[resa.getDay()]} ${resa.getDate()}</span>`;
+    return `<button class="cli" data-cli="${c.id}">
+      <span class="avat ${r.statut==='due'?'gold':''}">${initiales(c)}</span>
+      <span class="m"><b>${esc(c.prenom)}${c.nom?' '+esc(c.nom):''}</b><small>${ligne}</small></span>
+      <span class="side">${droite}</span>
+    </button>`;
+  }).join('') : vide(
+    q ? 'Aucune cliente trouvée' : S.cliFiltre==='relancer' ? 'Personne à relancer' : 'Aucune cliente ici',
+    q ? 'Essaie un autre prénom' : S.cliFiltre==='relancer' ? 'Tout le monde est revenu récemment ou a un rendez-vous. Beau travail' : '',
+    ICO.user);
+}
+
+/* ========================= Écran : Stock ========================= */
+function rendreStock(){
+  const prods = (S.produits||[]).slice().sort((a,b)=>(a.ordre||0)-(b.ordre||0));
+  const bas = Calc.produitsBas();
+  $('#dotStock').classList.toggle('hidden', !bas.length);
+  $('#stSub').textContent = prods.length
+    ? `${prods.length} produit${prods.length>1?'s':''}${bas.length?` · ${bas.length} à racheter`:' · tout va bien'}`
+    : 'Ajoute tes produits pour suivre ce qu’ils te coûtent';
+
+  $('#stAlerte').innerHTML = bas.length
+    ? `<div class="warn-n"><b>Pense à recommander :</b> ${bas.map(p=>esc(p.libelle)).join(', ')}. Un tap sur « J’ai racheté » remet le stock à niveau</div>`
+    : '';
+
+  $('#stListe').innerHTML = prods.length ? prods.map(p=>{
+    const si = Calc.stockInfo(p);
+    const inactif = p.actif === false;
+    let reste, sous;
+    if (si.seances != null){ reste = `~${si.seances}`; sous = `séance${si.seances>1?'s':''}${si.semaines!=null&&si.semaines<26?` · ${si.semaines<1?'moins d’1':'~'+Math.round(si.semaines)} sem`:''}`; }
+    else { reste = Q(si.stock); sous = uTxt(si.stock, p.unite); }
+    return `<div class="prod" style="${inactif?'opacity:.55':''}">
+      <div class="top">
+        <span class="ic ${si.bas?'low':''}">${p.unite==='mL'?ICO.drop:ICO.layers}</span>
+        <div class="m"><b>${esc(p.libelle)}</b>
+          <small>${E2(p.prix_achat)} les ${Q(p.contenance)} ${uTxt(p.contenance,p.unite)} · ${p.unite==='mL' ? E2(Calc.prixUnite(p)*10)+' les 10 mL' : E2(Calc.prixUnite(p))+' pièce'}${inactif?' · en pause':''}</small>
+        </div>
+        <div class="reste"><div class="v" style="${si.bas?'color:var(--or-profond)':''}">${reste}</div><small>${sous}</small></div>
+      </div>
+      <div class="gauge"><i class="${si.vide?'ko':si.bas?'warn':''}" style="width:${Math.max(3,si.pct)}%"></i></div>
+      <div class="between"><span class="mini">${Q(si.stock)} ${uTxt(si.stock,p.unite)} en stock</span><span class="mini">${si.seuil?`alerte sous ${Q(si.seuil)} ${uTxt(si.seuil,p.unite)}`:''}</span></div>
+      <div class="act">
+        <button class="sbtn" data-rachat="${p.id}">${ICO.cart}J’ai racheté</button>
+        <button class="sbtn" data-prod="${p.id}">${ICO.pen}Modifier</button>
+      </div>
+    </div>`;
+  }).join('') : vide('Aucun produit', 'Ajoute ton huile, tes draps… et chaque soin comptera ses vrais coûts tout seul', ICO.box);
+
+  const acts = S.prestations.filter(p=>p.actif!==false).sort((a,b)=>(a.ordre||0)-(b.ordre||0));
+  $('#stSoins').innerHTML = acts.map(p=>{
+    const lignes = Calc.consosDe(p.id);
+    const cout = Calc.consoPrestation(p.id);
+    const det = lignes.length
+      ? lignes.map(l=>{ const pr = prod(l.produit_id); if (!pr) return '';
+          const mot = esc(String(pr.libelle||'').split(/\s+/)[0].toLowerCase());
+          return pr.unite==='mL' ? `${Q(l.quantite)} mL ${mot}` : `${Q(l.quantite)} × ${mot}`; }).filter(Boolean).join(' · ')
+      : 'rien de réglé pour l’instant';
+    return `<button class="it" data-soin="${p.id}">
+      <span class="dot" style="width:10px;height:10px;border-radius:50%;background:${p.couleur};flex:none"></span>
+      <span class="m"><b>${esc(p.nom)}</b><small>${det}</small></span>
+      <span class="v">${E2(cout)}</span>
+    </button>`;
+  }).join('');
+}
+
+/* ========================= Écran : Argent ========================= */
+function rendreArgent(){
+  $$('#arSeg button').forEach(b=>b.classList.toggle('on', b.dataset.vue===S.arVue));
+  $('#arPernav').classList.toggle('hidden', S.arVue==='simu');
+  $('#arLbl').textContent = Calc.libelle(S.arPer, S.arRef);
+  if (S.arVue==='resultats') rendreResultats();
+  else if (S.arVue==='charges') rendreChargesV();
+  else rendreSimu();
+}
+
+function rendreResultats(){
+  const [from, to] = Calc.bornes(S.arPer, S.arRef);
+  const st = Calc.periode(from, to);
+  const r = S.reglages;
+
+  let html = `<div class="card"><div class="casc">
+    <div class="top">
+      <div class="lbl">Chiffre d’affaires encaissé</div>
+      <div class="v">${E(st.ca)}</div>
+      <div class="tiny muted" style="margin-top:2px">${st.nb} séance${st.nb>1?'s':''} encaissée${st.nb>1?'s':''}${st.nbPrevues?` · ${st.nbPrevues} encore à encaisser`:''}</div>
+    </div>
+    <div class="l"><div class="n">Cotisations<small>${String(r.taux_cotisations).replace('.',',')} % du CA encaissé</small></div><div class="v neg">− ${E(st.cotis)}</div></div>
+    <div class="l"><div class="n">Local<small>${H(st.hVendues)} × ${E2(r.tarif_local_h)}</small></div><div class="v neg">− ${E(st.local)}</div></div>
+    <div class="l"><div class="n">Consommables<small>huile, draps… au réel de chaque soin</small></div><div class="v neg">− ${E(st.conso)}</div></div>
+    <div class="l"><div class="n">Charges fixes<small>${S.charges.filter(c=>c.actif!==false).length} ligne${S.charges.filter(c=>c.actif!==false).length>1?'s':''} au prorata</small></div><div class="v neg">− ${E(st.fixes)}</div></div>
+    <div class="fin ${st.net<0?'ko':''}"><div class="n">Il te reste</div><div class="v">${E(st.net)}</div></div>
+  </div></div>`;
+
+  html += `<div class="stats3">
+    <div class="stat"><div class="v">${E(st.panier)}</div><div class="l">Panier moyen</div></div>
+    <div class="stat"><div class="v">${Math.round(st.remplissage)} %</div><div class="l">Remplissage</div></div>
+    <div class="stat"><div class="v">${st.hVendues>0?E(st.net/st.hVendues):'—'}</div><div class="l">Net par heure</div></div>
+  </div>`;
+
+  const pas = S.arPer === 'annee' ? 'annee' : S.arPer === 'semaine' ? 'semaine' : 'mois';
+  const n = pas === 'annee' ? 5 : 12, series = [];
+  for (let i = n-1; i >= 0; i--){
+    const ref = new Date(S.arRef);
+    if (pas === 'semaine') ref.setDate(ref.getDate() - i*7);
+    else if (pas === 'mois'){ ref.setDate(15); ref.setMonth(ref.getMonth() - i); }
+    else ref.setFullYear(ref.getFullYear() - i);
+    const [f,t] = Calc.bornes(pas, ref);
+    const s = Calc.periode(f,t);
+    series.push({ ca:s.ca, net:Math.max(0,s.net),
+      lbl: pas==='semaine' ? `${f.getDate()}/${f.getMonth()+1}` : pas==='mois' ? MOIS3[ref.getMonth()] : ref.getFullYear() });
+  }
+  const maxV = Math.max(1, ...series.map(s=>s.ca));
+  html += `<div class="card"><div class="card-t">D’où tu viens</div>
+    <div class="bars">${series.map(s=>`
+      <div class="b" title="${E(s.ca)}">
+        <i class="net" style="height:${(s.net/maxV*100).toFixed(1)}%"></i>
+        <i style="height:${((s.ca-s.net)/maxV*100).toFixed(1)}%"></i>
+      </div>`).join('')}</div>
+    <div style="display:flex;gap:5px">${series.map(s=>`<div style="flex:1;text-align:center"><em style="font-style:normal;font-size:10px;color:var(--encre2)">${s.lbl}</em></div>`).join('')}</div>
+    <div class="legend"><s>Chiffre d’affaires</s><s class="or">Ce qui te reste</s></div></div>`;
+
+  if (st.prestations.length){
+    const cls = st.prestations.slice().sort((a,b)=>b.netH-a.netH);
+    const best = cls[0];
+    html += `<div class="card"><div class="card-t">Tes soins, du plus au moins rentable</div><table class="tbl">
+      <thead><tr><th>Soin</th><th>Nb</th><th>CA</th><th>€ net / h</th></tr></thead>
+      <tbody>${cls.map(p=>`
+        <tr class="${p===best?'best-row':''}">
+          <td><span class="nm"><span class="dot" style="background:${p.couleur}"></span>${esc(court(p.nom))}</span></td>
+          <td class="num">${p.nb}</td>
+          <td class="num">${E(p.ca)}</td>
+          <td class="num ${p===best?'best':''}">${E(p.netH)}</td>
+        </tr>`).join('')}</tbody></table>
+      <p class="tiny muted" style="margin:10px 0 0"><b>${esc(best.nom)}</b>, c’est ce qui te rapporte le plus par heure de local occupée, battement compris. Ce classement doit décider de ce que tu mets en avant</p></div>`;
+  }
+
+  const gliss = Calc.caGlissant(), plaf = Number(r.plafond_ca||0), pc = plaf>0 ? gliss/plaf*100 : 0;
+  html += `<div class="card"><div class="card-t">Plafond micro-entreprise</div>
+    <div class="between"><span class="tiny muted">12 derniers mois</span><b class="num" style="font-size:19px">${E(gliss)}</b></div>
+    <div class="gauge"><i class="${pc>=90?'ko':pc>=75?'warn':''}" style="width:${Math.min(100,pc)}%"></i></div>
+    <div class="between"><span class="mini">${Math.round(pc)} % du plafond</span><span class="mini">${E(plaf)}</span></div>
+    ${pc>=75?`<div class="${pc>=90?'alert':'note'}" style="margin:10px 0 0">${pc>=100
+      ? 'Le plafond est dépassé. Il faut en parler à ton comptable maintenant'
+      : 'Tu approches du plafond de la micro-entreprise. À anticiper avec ton comptable avant de le franchir'}</div>`:''}</div>`;
+
+  $('#arBody').innerHTML = html;
+}
+
+function rendreChargesV(){
+  const [from, to] = Calc.bornes(S.arPer, S.arRef);
+  const st = Calc.periode(from, to), r = S.reglages;
+  const exploitation = st.local + st.conso + st.fixes;
+  const sorties = exploitation + st.cotis;
+  const parSeance = st.nb ? exploitation/st.nb : 0;
+
+  let html = `<div class="card"><div class="casc">
+    <div class="top">
+      <div class="lbl">Ce que coûte ton salon</div>
+      <div class="v">${E(exploitation)}</div>
+      <div class="tiny muted" style="margin-top:2px">${st.nb ? `${E(parSeance)} par séance sur ${st.nb} séances` : 'aucune séance sur la période'}</div>
+    </div>
+    <div class="l"><div class="n">Le local<small>${H(st.hVendues)} occupées × ${E2(r.tarif_local_h)}</small></div><div class="v">${E(st.local)}</div></div>
+    <div class="l"><div class="n">Les consommables<small>au réel de chaque soin encaissé</small></div><div class="v">${E(st.conso)}</div></div>
+    <div class="l"><div class="n">Les charges fixes<small>${S.charges.filter(c=>c.actif!==false).length} ligne${S.charges.filter(c=>c.actif!==false).length>1?'s':''}, au prorata</small></div><div class="v">${E(st.fixes)}</div></div>
+    <div class="l"><div class="n">Les cotisations<small>${String(r.taux_cotisations).replace('.',',')} % du chiffre d’affaires</small></div><div class="v">${E(st.cotis)}</div></div>
+    <div class="fin"><div class="n">Tout ce qui sort</div><div class="v">${E(sorties)}</div></div>
+  </div></div>`;
+
+  const props = Calc.mixActuel();
+  let netMoyen = 0;
+  for (const [pid, part] of Object.entries(props)){
+    const p = prest(pid); if (!p) continue;
+    netMoyen += part * Calc.netSeance(p.prix, p.duree_min, p.id, r);
+  }
+  if (netMoyen > 0 && st.fixes > 0){
+    const seuil = Math.ceil(st.fixes / netMoyen);
+    const atteint = st.nb >= seuil;
+    html += `<div class="card" style="border-color:${atteint?'var(--sauge)':'var(--or)'};border-width:1.5px">
+      <div class="card-t">Seuil de rentabilité</div>
+      <p style="margin:0;font-size:14.5px;line-height:1.55">Tes charges fixes sont couvertes au bout de <b class="num" style="font-size:20px">${seuil}</b> séance${seuil>1?'s':''}.
+      ${atteint
+        ? `Tu en as fait <b>${st.nb}</b> : les ${st.nb-seuil} suivantes sont pour toi`
+        : `Tu en es à <b>${st.nb}</b> — il en manque <b>${seuil-st.nb}</b> pour rentrer dans tes frais`}</p>
+      <p class="tiny muted" style="margin:8px 0 0">Le local et les consommables ne comptent pas ici : ils n’existent que si une cliente vient. Seules les charges fixes tombent quoi qu’il arrive</p>
+    </div>`;
+  }
+
+  html += `<div class="card"><div class="card-t">Le local</div>
+    <div class="lst">
+      <div class="it"><div class="m"><b>${E2(r.tarif_local_h)} de l’heure</b><small>${
+        {reelle:'facturé à la minute', demi:'demi-heure entamée', heure:'heure entamée'}[r.arrondi_local]||''} · battement de ${r.battement_min} min</small></div><div class="v">${E(st.local)}</div></div>
+      <div class="it"><div class="m"><b>${H(st.hVendues)} occupées</b><small>sur ${H(st.hOuvrables)} ouvrables — ${Math.round(st.remplissage)} % de remplissage</small></div></div>
+    </div>
+    <p class="tiny muted" style="margin:10px 0 0">Charge variable : tu ne paies que les heures réservées. Une heure vide ne coûte rien, mais ne rapporte rien non plus</p></div>`;
+
+  const prods = (S.produits||[]).filter(p=>p.actif!==false);
+  html += `<div class="card"><div class="card-t">Les consommables <a href="#" class="lien" data-va="stock">gérer le stock</a></div>`;
+  if (prods.length && (S.consos||[]).length){
+    html += `<div class="lst">${prods.map(p=>{
+      const usage = Calc.usageProduit(p.id, from, to);
+      const cout = usage * Calc.prixUnite(p);
+      return `<div class="it"><div class="m"><b>${esc(p.libelle)}</b><small>${Q(usage)} ${uTxt(usage,p.unite)} ${p.unite==='mL'?'utilisés':'utilisées'} sur la période</small></div><div class="v">${E2(cout)}</div></div>`;
+    }).join('')}
+    <div class="it" style="background:var(--creme2);border-radius:10px;padding-left:10px;padding-right:10px"><div class="m"><b>Total</b><small>compté soin par soin</small></div><div class="v"><b>${E(st.conso)}</b></div></div></div>`;
+  } else {
+    html += `<p class="tiny muted" style="margin:0">Aucun produit relié aux soins. En attendant, le forfait de ${E2(r.conso_seance)} par séance s’applique — soit ${E(st.conso)} sur la période</p>`;
+  }
+  html += `</div>`;
+
+  const fx = S.charges.slice().sort((a,b)=>Number(b.montant)-Number(a.montant));
+  html += `<div class="card"><div class="card-t">Les charges fixes <a href="#" class="lien" id="addCharge">ajouter</a></div>`;
+  html += fx.length ? `<div class="lst">
+      ${fx.map(c=>{
+        const part = Calc.chargesFixes(from, to, [c]);
+        return `<button class="it" data-charge="${c.id}">
+          <div class="m"><b>${esc(c.libelle)}</b><small>${E2(c.montant)} ${c.type==='fixe_mensuelle'?'par mois':c.type==='fixe_annuelle'?'par an':'une seule fois'}${c.actif===false?' · en pause':''}</small></div>
+          <div class="v">${E(part)}</div></button>`;
+      }).join('')}
+      <div class="it" style="background:var(--creme2);border-radius:10px;padding-left:10px;padding-right:10px"><div class="m"><b>Total sur la période</b></div><div class="v"><b>${E(st.fixes)}</b></div></div>
+    </div>`
+    : `<p class="tiny muted" style="margin:0">Rien de saisi. Assurance, abonnement Systeme.io, comptable, téléphone — tout ce que tu paies même un mois sans cliente</p>`;
+  html += `</div>`;
+
+  html += `<div class="card"><div class="card-t">Les cotisations</div>
+    <div class="lst"><div class="it"><div class="m"><b>${String(r.taux_cotisations).replace('.',',')} % du chiffre d’affaires</b><small>${esc(r.taux_libelle||'')}</small></div><div class="v">${E(st.cotis)}</div></div></div>
+    <p class="tiny muted" style="margin:10px 0 0">Calculées sur le chiffre d’affaires encaissé (${E(st.ca)}), pas sur ce qui reste après charges. C’est le piège classique de la micro-entreprise. Taux à faire confirmer par ton comptable</p></div>`;
+
+  $('#arBody').innerHTML = html;
+}
+
+function rendreSimu(){
+  const ref = new Date(), [from, to] = Calc.bornes('mois', ref);
+  const r = S.reglages;
+  const props = S.simuMode === 'actuel' ? Calc.mixActuel() : proportionsCompose();
+  const res = Calc.simuler(r.objectif_net, props, from, to);
+  const max = Calc.maximum(props, from, to);
+
+  let html = `<div class="card">
+    <label class="f-l" for="objInput">Ton objectif net du mois</label>
+    <div class="row"><input class="f" id="objInput" type="number" inputmode="numeric" min="0" step="50" value="${Math.round(r.objectif_net||0)}" style="flex:1"><span class="serif" style="font-size:22px">€</span></div>
+    <label class="f-l" for="batt">Battement entre deux clientes <span style="float:right;color:var(--sauge);font-weight:700" id="battV">${r.battement_min} min</span></label>
+    <input id="batt" type="range" min="0" max="45" step="5" value="${r.battement_min}" style="width:100%;accent-color:var(--sauge)">
+    <p class="mini" style="margin:6px 0 0">Installation, ménage, huile… C’est le réglage qui change le plus le classement de tes soins</p>
+  </div>`;
+
+  html += `<div class="seg">
+    <button data-simu="actuel" class="${S.simuMode==='actuel'?'on':''}">Mon mix actuel</button>
+    <button data-simu="compose" class="${S.simuMode==='compose'?'on':''}">Je compose</button>
+  </div>`;
+
+  if (S.simuMode==='compose'){
+    const acts = S.prestations.filter(p=>p.actif!==false);
+    html += `<div class="card"><div class="card-t">Répartis tes séances</div><div class="lst">` + acts.map(p=>{
+      const v = S.simuCounts[p.id] ?? 1;
+      return `<div class="it"><span class="dot" style="width:10px;height:10px;border-radius:50%;background:${p.couleur};flex:none"></span>
+        <div class="m"><b>${esc(court(p.nom))}</b><small>${E(p.prix)} · ${p.duree_min} min</small></div>
+        <div class="step"><button data-sm="${p.id}" aria-label="Moins"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round"><path d="M5 12h14"/></svg></button>
+        <span class="q">${v}</span>
+        <button data-sp="${p.id}" aria-label="Plus"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></button></div></div>`;
+    }).join('') + `</div></div>`;
+  }
+
+  if (!res.possible){
+    html += `<div class="alert">Avec ces réglages, une séance coûte plus cher qu’elle ne rapporte. Vérifie le tarif du local, le battement et tes prix</div>`;
+  } else {
+    const trop = res.remplissage > 100;
+    html += `<div class="card" style="border-color:${trop?'var(--rouge)':'var(--sauge)'};border-width:1.5px">
+      <div class="card-t">Pour ${E(r.objectif_net)} net en ${MOIS[ref.getMonth()]}</div>
+      <div class="row" style="align-items:baseline;gap:8px;margin-bottom:4px">
+        <span class="num" style="font-size:46px;line-height:1">${res.nb}</span>
+        <span style="font-size:16px" class="muted">séances</span>
+      </div>
+      <p class="tiny muted" style="margin:0 0 12px">soit <b>${H(res.heures)}</b> de local sur les <b>${H(res.hOuvrables)}</b> ouvrables du mois — <b>${Math.round(res.remplissage)} %</b> de remplissage, pour <b>${E(res.ca)}</b> de chiffre d’affaires</p>
+      <div class="gauge"><i class="${trop?'ko':res.remplissage>80?'warn':''}" style="width:${Math.min(100,res.remplissage)}%"></i></div>
+      ${trop
+        ? `<div class="alert" style="margin:12px 0 0">Hors d’atteinte ce mois-ci : il faudrait ${H(res.heures)} alors que tu n’ouvres que ${H(res.hOuvrables)}. Ouvre plus, monte tes prix, ou vise un peu plus bas</div>`
+        : `<div class="ok" style="margin:12px 0 0">Atteignable. Il reste ${H(res.hOuvrables-res.heures)} de marge dans le mois</div>`}
+      <div class="lst" style="margin-top:12px">
+        ${res.repartition.map(l=>`<div class="it">
+          <span class="dot" style="width:10px;height:10px;border-radius:50%;background:${l.prestation.couleur};flex:none"></span>
+          <div class="m"><b>${esc(l.prestation.nom)}</b><small>${E(l.prestation.prix)} · ${l.prestation.duree_min} min</small></div>
+          <div class="v">× ${l.n}</div></div>`).join('')}
+      </div>
+    </div>`;
+  }
+
+  html += `<div class="card">
+    <div class="card-t">Ton maximum théorique</div>
+    <p style="margin:0;font-size:14.5px;line-height:1.55">À ce mix et 100 % de remplissage, ton plafond du mois est
+    <b class="num" style="font-size:20px">${E(max.net)}</b> net, en ${max.nb} séances.</p>
+    <p class="tiny muted" style="margin:8px 0 0">${Number(r.objectif_net||0) > max.net
+      ? 'Ton objectif est au-dessus : aucun remplissage ne suffira. Il faudra ouvrir plus d’heures ou revoir tes prix'
+      : 'Ton objectif tient dans tes heures d’ouverture actuelles'}</p>
+  </div>`;
+
+  $('#arBody').innerHTML = html;
+}
+
+function proportionsCompose(){
+  const counts = {}; let tot = 0;
+  for (const p of S.prestations.filter(p=>p.actif!==false)){ const v = S.simuCounts[p.id] ?? 1; counts[p.id]=v; tot += v; }
+  if (!tot) return Calc.mixActuel();
+  const o = {}; for (const k in counts) if (counts[k]>0) o[k] = counts[k]/tot;
+  return o;
+}
+</script>
+<script>
+/* ========================= Feuilles ========================= */
+function ouvrirSheet(titre, html){
+  $('#shTitle').textContent = titre;
+  /* Le corps est recréé à chaque ouverture : aucun écouteur ni data-* ne survit
+     d'une feuille à l'autre (sinon les steppers finiraient par compter double). */
+  const vieux = $('#shBody');
+  const neuf = document.createElement('div');
+  neuf.className = 'bd'; neuf.id = 'shBody'; neuf.innerHTML = html;
+  vieux.replaceWith(neuf);
+  $('#ov').classList.add('on'); $('#sheet').classList.add('on');
+  neuf.scrollTop = 0;
+}
+function fermerSheet(){ $('#ov').classList.remove('on'); $('#sheet').classList.remove('on'); }
+
+const seance = id => S.seances.find(s => String(s.id)===String(id));
+
+/* ----- Encaissement / statuts (le geste quotidien) ----- */
+let _statutEnCours = false;   // un double-tap ne doit jamais bouger le stock deux fois
+async function changerStatut(id, statut, mode = ''){
+  if (_statutEnCours) return;
+  _statutEnCours = true;
+  try {
+    const s = seance(id); if (!s) return;
+    const etaitHonoree = s.statut === 'honoree';
+    const devientHonoree = statut === 'honoree';
+    /* la séance s'écrit d'abord : si l'écriture échoue, le stock n'a pas bougé */
+    await DB.update('seances', id, { statut, mode_paiement: devientHonoree ? mode : '' });
+    if (etaitHonoree && !devientHonoree) await Calc.bougerStock(seance(id), -1);
+    if (!etaitHonoree && devientHonoree) await Calc.bougerStock(seance(id), +1);
+    fermerSheet(); rendreTout();
+    toast(devientHonoree ? `${E(s.prix_facture)} encaissés — joli` :
+          statut==='prevue' ? 'Repassée en prévue' :
+          statut==='noshow' ? 'Notée absente' : 'Séance annulée');
+  } finally { _statutEnCours = false; }
+}
+
+function sheetSeance(id){
+  const s = seance(id); if (!s) return;
+  const p = prest(s.prestation_id), c = cli(s.cliente_id), d = new Date(s.date_heure);
+  const quand = `${JOURS[d.getDay()]} ${d.getDate()} ${MOIS3[d.getMonth()]} à ${hm(d)}`;
+
+  let html = `<div class="row" style="margin-bottom:14px">
+    <span class="avat" style="width:46px;height:46px;font-size:18px">${initiales(c)}</span>
+    <div style="flex:1;min-width:0"><b style="font-size:16.5px">${esc(nomCli(s.cliente_id))}</b>
+    <div class="tiny muted">${esc(p?p.nom:'Soin')} · ${s.duree_min} min · ${quand}</div></div>
+    <span class="num" style="font-size:23px">${E(s.prix_facture)}</span>
+  </div>`;
+
+  if (s.statut === 'prevue'){
+    html += `<div class="card-t">Encaisser en un tap</div>
+    <div class="paygrid" style="margin-bottom:16px">
+      <button class="pay on" data-pay="especes"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round"><rect x="2.5" y="6.5" width="19" height="11" rx="2"/><circle cx="12" cy="12" r="2.6"/></svg>Espèces</button>
+      <button class="pay" data-pay="cb"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round"><rect x="2.5" y="5.5" width="19" height="13" rx="2.5"/><path d="M2.5 10h19"/></svg>Carte</button>
+      <button class="pay" data-pay="virement"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M4 17V7l8 5 8-5v10z" opacity=".5"/><path d="M4 7h16"/></svg>Virement</button>
+      <button class="pay" data-pay="bon_cadeau"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="8" width="17" height="12" rx="2"/><path d="M12 8v12M3.5 12.5h17M8 8s-2.5-.5-2.5-2.5S8 3 9.5 4.5 12 8 12 8s1-2 2.5-3.5 4 0 4 1.5S16 8 16 8"/></svg>Bon cadeau</button>
+    </div>
+    <div class="row" style="gap:8px;margin-bottom:16px">
+      <button class="btn sm ghost" style="flex:1" data-statut="annulee">Annulée</button>
+      <button class="btn sm ghost" style="flex:1" data-statut="noshow">Absente</button>
+    </div>`;
+  } else {
+    html += `<div class="note" style="margin-bottom:14px">${LIB_STATUT[s.statut]}${s.mode_paiement?` · ${LIB_PAIEMENT[s.mode_paiement]}`:''}${s.statut==='honoree'?' — comptée dans ton chiffre d’affaires, stock descendu':''}</div>
+    <button class="btn sm ghost" style="margin-bottom:16px" data-statut="prevue">Repasser en prévue</button>`;
+  }
+
+  html += `<div class="row" style="gap:8px">
+    ${c?`<button class="btn sm ghost" style="flex:1" data-fiche="${c.id}">Sa fiche</button>`:''}
+    <button class="btn sm ghost" style="flex:1" data-editseance="${s.id}">Modifier</button>
+  </div>
+  <button class="btn sm danger" style="margin-top:8px" data-suppseance="${s.id}">Supprimer la séance</button>`;
+
+  ouvrirSheet('La séance', html);
+  $('#shBody').dataset.seanceId = s.id;
+}
+
+function sheetSeanceEdit(id){
+  const s = id ? seance(id) : null;
+  const pre = s ? prest(s.prestation_id) : null;
+  const d = s ? new Date(s.date_heure) : new Date();
+  const acts = S.prestations.filter(p=>p.actif!==false).sort((a,b)=>(a.ordre||0)-(b.ordre||0));
+  const html = `
+    <label class="f-l">Le soin</label>
+    <div class="chips" id="edChips">${acts.map(p=>`<button class="chip ${pre&&String(pre.id)===String(p.id)?'on':''}" data-chip="${p.id}">${esc(court(p.nom))} · ${E(p.prix)}</button>`).join('')}</div>
+    <div class="f2" style="margin-top:4px">
+      <div><label class="f-l" for="edDate">Le jour</label><input class="f" id="edDate" type="date" value="${ymd(d)}"></div>
+      <div><label class="f-l" for="edHeure">L’heure</label><input class="f" id="edHeure" type="time" step="300" value="${hm(d)}"></div>
+    </div>
+    <div class="f2">
+      <div><label class="f-l" for="edPrix">Le prix (remise, bon…)</label><input class="f" id="edPrix" type="number" inputmode="decimal" min="0" step="1" value="${s?Number(s.prix_facture):''}"></div>
+      <div><label class="f-l" for="edDuree">Durée (min)</label><input class="f" id="edDuree" type="number" inputmode="numeric" min="10" step="5" value="${s?s.duree_min:''}"></div>
+    </div>
+    <label class="f-l" for="edNotes">Note sur la séance</label>
+    <input class="f" id="edNotes" type="text" value="${esc(s?s.notes:'')}" placeholder="Bon cadeau de Noël, douleur épaule…">
+    <button class="btn" style="margin-top:18px" id="edSave">Enregistrer</button>`;
+  ouvrirSheet('Modifier la séance', html);
+  const body = $('#shBody');
+  body.dataset.editId = id || '';
+  body.querySelector('#edChips').addEventListener('click', e=>{
+    const b = e.target.closest('[data-chip]'); if (!b) return;
+    body.querySelectorAll('.chip').forEach(x=>x.classList.remove('on'));
+    b.classList.add('on');
+    const p = prest(b.dataset.chip);
+    if (p){ body.querySelector('#edPrix').value = Number(p.prix); body.querySelector('#edDuree').value = p.duree_min; }
+  });
+  body.querySelector('#edSave').addEventListener('click', async ()=>{
+    const chip = body.querySelector('.chip.on');
+    const p = chip ? prest(chip.dataset.chip) : pre;
+    if (!p) return toast('Choisis un soin');
+    if (!body.querySelector('#edDate').value) return toast('Il manque le jour');
+    const patch = {
+      prestation_id: p.id,
+      date_heure: new Date(body.querySelector('#edDate').value + 'T' + (body.querySelector('#edHeure').value||'10:00')).toISOString(),
+      prix_facture: Number(body.querySelector('#edPrix').value||p.prix),
+      duree_min: Number(body.querySelector('#edDuree').value||p.duree_min),
+      notes: body.querySelector('#edNotes').value.trim(),
+    };
+    const old = seance(id);
+    if (old && old.statut==='honoree' && String(old.prestation_id)!==String(p.id)){
+      await Calc.bougerStock(old, -1);
+      await DB.update('seances', id, patch);
+      await Calc.bougerStock(seance(id), +1);
+    } else await DB.update('seances', id, patch);
+    fermerSheet(); rendreTout(); toast('Séance modifiée');
+  });
+}
+
+function sheetAjout(prefill = {}){
+  const acts = S.prestations.filter(p=>p.actif!==false).sort((a,b)=>(a.ordre||0)-(b.ordre||0));
+  const d = prefill.date ? new Date(prefill.date) : (()=>{ const x = new Date(); x.setMinutes(0,0,0); x.setHours(x.getHours()+1); return x; })();
+  const preCli = prefill.cliente_id ? cli(prefill.cliente_id) : null;
+  const html = `
+    <label class="f-l" for="ajCli">La cliente</label>
+    <input class="f" id="ajCli" type="text" autocomplete="off" placeholder="Tape son prénom…" value="${preCli?esc((preCli.prenom+' '+(preCli.nom||'')).trim()):''}">
+    <div id="ajSugg" style="margin-top:6px"></div>
+    <label class="f-l">Le soin</label>
+    <div class="chips" id="ajChips">${acts.map((p,i)=>`<button class="chip ${i===0?'on':''}" data-chip="${p.id}">${esc(court(p.nom))} · ${E(p.prix)}</button>`).join('')}</div>
+    <div class="f2" style="margin-top:4px">
+      <div><label class="f-l" for="ajDate">Le jour</label><input class="f" id="ajDate" type="date" value="${ymd(d)}"></div>
+      <div><label class="f-l" for="ajHeure">L’heure</label><input class="f" id="ajHeure" type="time" step="300" value="${hm(d)}"></div>
+    </div>
+    <label class="f-l" for="ajPrix">Le prix</label>
+    <input class="f" id="ajPrix" type="number" inputmode="decimal" min="0" step="1" value="${acts.length?Number(acts[0].prix):''}">
+    <button class="btn" style="margin-top:18px" id="ajSave">Ajouter la séance</button>
+    <p class="mini" style="text-align:center;margin:10px 0 0">Un prénom inconnu crée la fiche cliente tout seul</p>`;
+  ouvrirSheet('Nouvelle séance', html);
+  const body = $('#shBody');
+  let cliChoisie = preCli ? preCli.id : null;
+
+  const sugg = () => {
+    const q = body.querySelector('#ajCli').value.trim().toLowerCase();
+    const box = body.querySelector('#ajSugg');
+    if (!q || cliChoisie){ box.innerHTML=''; return; }
+    const m = S.clientes.filter(c => (c.prenom+' '+(c.nom||'')).toLowerCase().includes(q)).slice(0,4);
+    box.innerHTML = m.map(c=>`<button class="chip" data-sugg="${c.id}" style="margin:0 6px 6px 0">${esc(c.prenom)}${c.nom?' '+esc(c.nom):''}</button>`).join('');
+  };
+  body.querySelector('#ajCli').addEventListener('input', ()=>{ cliChoisie = null; sugg(); });
+  body.querySelector('#ajSugg').addEventListener('click', e=>{
+    const b = e.target.closest('[data-sugg]'); if (!b) return;
+    cliChoisie = b.dataset.sugg;
+    body.querySelector('#ajCli').value = b.textContent;
+    body.querySelector('#ajSugg').innerHTML = '';
+  });
+  body.querySelector('#ajChips').addEventListener('click', e=>{
+    const b = e.target.closest('[data-chip]'); if (!b) return;
+    body.querySelectorAll('#ajChips .chip').forEach(x=>x.classList.remove('on'));
+    b.classList.add('on');
+    const p = prest(b.dataset.chip);
+    if (p) body.querySelector('#ajPrix').value = Number(p.prix);
+  });
+  body.querySelector('#ajSave').addEventListener('click', async ()=>{
+    const nom = body.querySelector('#ajCli').value.trim();
+    if (!nom) return toast('Il manque le prénom');
+    if (!body.querySelector('#ajDate').value) return toast('Il manque le jour');
+    const chip = body.querySelector('#ajChips .chip.on');
+    const p = chip ? prest(chip.dataset.chip) : null;
+    if (!p) return toast('Choisis un soin');
+    let cid = cliChoisie;
+    if (!cid){
+      const exist = S.clientes.find(c => (c.prenom+' '+(c.nom||'')).trim().toLowerCase() === nom.toLowerCase());
+      if (exist) cid = exist.id;
+      else {
+        const parts = nom.split(/\s+/);
+        const nc = await DB.insert('clientes', { prenom: parts[0], nom: parts.slice(1).join(' '), tel:'', email:'', source:'inconnu', notes:'' });
+        cid = nc.id;
+      }
+    }
+    await DB.insert('seances', {
+      cliente_id: cid, prestation_id: p.id,
+      date_heure: new Date(body.querySelector('#ajDate').value + 'T' + (body.querySelector('#ajHeure').value||'10:00')).toISOString(),
+      duree_min: p.duree_min, prix_facture: Number(body.querySelector('#ajPrix').value||p.prix),
+      statut:'prevue', mode_paiement:'', source:'manuelle', notes:'',
+    });
+    fermerSheet(); rendreTout(); toast('Séance ajoutée');
+  });
+}
+
+/* ----- Clientes ----- */
+function sheetCliente(id){
+  const c = cli(id); if (!c) return;
+  const r = Calc.relanceInfo(c), stc = statsCliente(id);
+  const resa = Calc.prochaineResa(id);
+  const tel = telIntl(c.tel);
+  const hist = S.seances.filter(s=>String(s.cliente_id)===String(id))
+    .sort((a,b)=>new Date(b.date_heure)-new Date(a.date_heure)).slice(0,8);
+
+  let html = `<div class="row" style="margin-bottom:6px">
+    <span class="avat ${r.statut==='due'?'gold':''}" style="width:50px;height:50px;font-size:19px">${initiales(c)}</span>
+    <div style="flex:1;min-width:0">
+      <div class="tiny muted">${c.tel?esc(c.tel):'pas de téléphone'}${c.email?' · '+esc(c.email):''}</div>
+      <div class="tiny muted">${r.derniere?`Dernier soin ${ilYa(r.derniere)}`:'Jamais venue pour l’instant'}${r.rythme?` · revient ~ ${r.rythme>=12?'toutes les '+Math.round(r.rythme/7)+' sem':'tous les '+r.rythme+' j'}`:''}</div>
+    </div>
+  </div>`;
+
+  if (tel) html += `<div class="row" style="gap:8px;margin:10px 0 4px">
+    <a class="btn sm ghost" style="flex:1" href="tel:${tel}">${ICO.phone}Appeler</a>
+    <a class="btn sm ghost" style="flex:1" href="sms:${tel}">${ICO.msg}SMS</a>
+    <a class="btn sm ghost" style="flex:1" href="https://wa.me/${tel.replace('+','')}" target="_blank" rel="noopener">${ICO.wa}WhatsApp</a>
+  </div>`;
+
+  if (r.statut==='due') html += `<div class="warn-n" style="margin-top:10px"><b>Elle mérite un petit signe.</b> Pas revenue depuis ${r.jrs} jours${r.rythme?` alors qu’elle venait ~ ${r.rythme>=12?'toutes les '+Math.round(r.rythme/7)+' sem':'tous les '+r.rythme+' j'}`:''}.
+    <button class="btn sm gold" style="margin-top:9px" data-relance="${c.id}">${ICO.bell}Préparer la relance</button></div>`;
+  else if (r.statut==='relancee') html += `<div class="note" style="margin-top:10px">Relancée ${ilYa(c.derniere_relance)} — on lui laisse le temps de répondre</div>`;
+  else if (r.statut==='off') html += `<div class="note" style="margin-top:10px">Relances coupées pour elle</div>`;
+
+  if (resa) html += `<div class="ok" style="margin-top:10px">Prochain rendez-vous : ${JOURS[resa.getDay()]} ${resa.getDate()} ${MOIS3[resa.getMonth()]} à ${hm(resa)}</div>`;
+
+  html += `<div class="stats3" style="margin-top:12px">
+    <div class="stat"><div class="v">${stc.nb}</div><div class="l">Soin${stc.nb>1?'s':''} reçu${stc.nb>1?'s':''}</div></div>
+    <div class="stat"><div class="v">${E(stc.ca)}</div><div class="l">Depuis le début</div></div>
+    <div class="stat"><div class="v">${stc.nb?E(stc.panier):'—'}</div><div class="l">Panier moyen</div></div>
+  </div>`;
+
+  if (c.notes) html += `<div class="card tight" style="margin-bottom:12px"><div class="card-t" style="margin-bottom:6px">Ses préférences</div><p style="margin:0;font-size:14px">${esc(c.notes)}</p></div>`;
+
+  if (hist.length) html += `<div class="card-t" style="margin:4px 2px 8px">Son historique</div>` + hist.map(s=>carteSeance(s,{plein:true,date:true})).join('');
+
+  html += `<div class="row" style="gap:8px;margin-top:14px">
+    <button class="btn sm ghost" style="flex:1" data-editcli="${c.id}">Modifier sa fiche</button>
+    <button class="btn sm" style="flex:1" data-newseance="${c.id}">${ICO.plus}Nouvelle séance</button>
+  </div>`;
+
+  ouvrirSheet(`${c.prenom}${c.nom?' '+c.nom:''}`, html);
+}
+
+function sheetClienteEdit(id){
+  const c = id ? cli(id) : null;
+  const html = `
+    <div class="f2">
+      <div><label class="f-l" for="ceP">Prénom</label><input class="f" id="ceP" type="text" value="${esc(c?c.prenom:'')}"></div>
+      <div><label class="f-l" for="ceN">Nom</label><input class="f" id="ceN" type="text" value="${esc(c?c.nom:'')}"></div>
+    </div>
+    <div class="f2">
+      <div><label class="f-l" for="ceT">Téléphone</label><input class="f" id="ceT" type="tel" value="${esc(c?c.tel:'')}" placeholder="06 12 34 56 78"></div>
+      <div><label class="f-l" for="ceE">Email</label><input class="f" id="ceE" type="email" value="${esc(c?c.email:'')}"></div>
+    </div>
+    <label class="f-l" for="ceS">Comment elle t’a connue</label>
+    <select class="f" id="ceS">${['inconnu','site','instagram','bouche-a-oreille','google'].map(s=>`<option value="${s}" ${c&&c.source===s?'selected':''}>${{inconnu:'Je ne sais plus',site:'Le site',instagram:'Instagram','bouche-a-oreille':'Le bouche-à-oreille',google:'Google'}[s]}</option>`).join('')}</select>
+    <label class="f-l" for="ceNo">Ses préférences (pression, zones, huile…)</label>
+    <textarea class="f" id="ceNo" placeholder="Pression forte, n’aime pas le froid…">${esc(c?c.notes:'')}</textarea>
+    <p class="mini" style="margin:6px 0 0">Préférences uniquement — jamais de santé ici (grossesse, traitement…), c’est protégé par la loi et cette app n’est pas faite pour ça</p>
+    <label class="f-l" style="display:flex;align-items:center;justify-content:space-between;min-height:44px">Ne plus la relancer
+      <input type="checkbox" id="ceOff" ${c&&c.relance_off?'checked':''} style="width:22px;height:22px;accent-color:var(--sauge)"></label>
+    <button class="btn" style="margin-top:12px" id="ceSave">Enregistrer</button>
+    ${c?`<button class="btn sm danger" style="margin-top:8px" data-suppcli="${c.id}">Supprimer la fiche</button>`:''}`;
+  ouvrirSheet(c ? 'Sa fiche' : 'Nouvelle cliente', html);
+  $('#shBody').querySelector('#ceSave').addEventListener('click', async ()=>{
+    const b = $('#shBody');
+    const row = {
+      prenom: b.querySelector('#ceP').value.trim(), nom: b.querySelector('#ceN').value.trim(),
+      tel: b.querySelector('#ceT').value.trim(), email: b.querySelector('#ceE').value.trim(),
+      source: b.querySelector('#ceS').value, notes: b.querySelector('#ceNo').value.trim(),
+      relance_off: b.querySelector('#ceOff').checked,
+    };
+    if (!row.prenom) return toast('Il manque le prénom');
+    if (c) await DB.update('clientes', c.id, row);
+    else await DB.insert('clientes', row);
+    fermerSheet(); rendreTout(); toast(c?'Fiche mise à jour':'Cliente ajoutée');
+  });
+}
+
+function sheetRelance(id){
+  const c = cli(id); if (!c) return;
+  const tel = telIntl(c.tel);
+  const msg = messageRelance(c);
+  const html = `
+    <p class="tiny muted" style="margin:0 0 10px">Ton message est prêt — relis-le, ajuste-le, envoie-le. Le modèle se change dans les réglages</p>
+    <textarea class="f" id="rlMsg" style="min-height:130px" aria-label="Message de relance">${esc(msg)}</textarea>
+    <div class="row" style="gap:8px;margin-top:12px">
+      ${tel?`<a class="btn sm" style="flex:1" id="rlWa" href="#">${ICO.wa}WhatsApp</a>
+      <a class="btn sm ghost" style="flex:1" id="rlSms" href="#">${ICO.msg}SMS</a>`:''}
+      <button class="btn sm ghost" style="flex:1" id="rlCopy">Copier</button>
+    </div>
+    <button class="btn gold" style="margin-top:10px" data-relancee="${c.id}">${ICO.check}C’est envoyé — marquer relancée</button>
+    ${!tel?`<p class="mini" style="margin:10px 0 0;text-align:center">Pas de numéro sur sa fiche : copie le message et envoie-le où tu l’as (Insta, mail…)</p>`:''}`;
+  ouvrirSheet(`Relancer ${c.prenom}`, html);
+  const b = $('#shBody');
+  const txt = () => b.querySelector('#rlMsg').value;
+  if (tel){
+    b.querySelector('#rlWa').addEventListener('click', e=>{ e.preventDefault(); window.open(`https://wa.me/${tel.replace('+','')}?text=${encodeURIComponent(txt())}`,'_blank'); });
+    b.querySelector('#rlSms').addEventListener('click', e=>{ e.preventDefault(); location.href = `sms:${tel}&body=${encodeURIComponent(txt())}`; });
+  }
+  b.querySelector('#rlCopy').addEventListener('click', async ()=>{
+    try { await navigator.clipboard.writeText(txt()); toast('Message copié'); }
+    catch(e){ b.querySelector('#rlMsg').select(); document.execCommand('copy'); toast('Message copié'); }
+  });
+}
+
+/* ----- Stock ----- */
+function sheetProduit(id){
+  const p = id ? prod(id) : null;
+  const html = `
+    <label class="f-l" for="prL">Le produit</label>
+    <input class="f" id="prL" type="text" value="${esc(p?p.libelle:'')}" placeholder="Huile de massage, draps…">
+    <div class="f3">
+      <div><label class="f-l" for="prU">Unité</label><select class="f" id="prU">${['mL','unité','dose'].map(u=>`<option ${p&&p.unite===u?'selected':''}>${u}</option>`).join('')}</select></div>
+      <div><label class="f-l" for="prC">Par achat</label><input class="f" id="prC" type="number" inputmode="decimal" min="1" value="${p?Q(p.contenance).replace(',','.'):''}" placeholder="1000"></div>
+      <div><label class="f-l" for="prP">Prix payé</label><input class="f" id="prP" type="number" inputmode="decimal" min="0" step="0.5" value="${p?Number(p.prix_achat):''}" placeholder="32"></div>
+    </div>
+    <p class="mini" style="margin:6px 0 0">Exemple : un flacon d’1 litre → unité mL, 1000 par achat. L’app en déduit le prix du mL toute seule</p>
+    <div class="f2">
+      <div><label class="f-l" for="prS">En stock là, maintenant</label><input class="f" id="prS" type="number" inputmode="decimal" min="0" value="${p?Q(p.stock).replace(',','.'):''}"></div>
+      <div><label class="f-l" for="prA">M’alerter sous</label><input class="f" id="prA" type="number" inputmode="decimal" min="0" value="${p?Q(p.seuil).replace(',','.'):''}"></div>
+    </div>
+    <button class="btn" style="margin-top:16px" id="prSave">Enregistrer</button>
+    ${p?`<button class="btn sm danger" style="margin-top:8px" data-suppprod="${p.id}">Supprimer le produit</button>`:''}`;
+  ouvrirSheet(p ? p.libelle : 'Nouveau produit', html);
+  $('#shBody').querySelector('#prSave').addEventListener('click', async ()=>{
+    const b = $('#shBody');
+    const row = {
+      libelle: b.querySelector('#prL').value.trim(),
+      unite: b.querySelector('#prU').value,
+      contenance: Number(b.querySelector('#prC').value||1),
+      prix_achat: Number(b.querySelector('#prP').value||0),
+      stock: Number(b.querySelector('#prS').value||0),
+      seuil: Number(b.querySelector('#prA').value||0),
+      actif: true,
+    };
+    if (!row.libelle) return toast('Il manque le nom du produit');
+    if (!(row.contenance > 0)) return toast('La contenance d’un achat doit être d’au moins 1');
+    if (p) await DB.update('produits', p.id, row);
+    else { row.ordre = (S.produits||[]).length + 1; await DB.insert('produits', row); }
+    fermerSheet(); rendreTout(); toast('Produit enregistré');
+  });
+}
+
+function sheetConsoSoin(pid){
+  const p = prest(pid); if (!p) return;
+  const prods = (S.produits||[]).filter(x=>x.actif!==false).sort((a,b)=>(a.ordre||0)-(b.ordre||0));
+  if (!prods.length){ toast('Ajoute d’abord un produit dans Stock'); return; }
+  const val = {};
+  for (const pr of prods){
+    const l = (S.consos||[]).find(x=>String(x.prestation_id)===String(pid)&&String(x.produit_id)===String(pr.id));
+    val[pr.id] = l ? Number(l.quantite) : 0;
+  }
+  const ligne = pr => {
+    const step = pr.unite==='mL' ? 5 : 1;
+    return `<div class="it"><div class="m"><b>${esc(pr.libelle)}</b><small>${E2(Calc.prixUnite(pr))} ${pr.unite==='mL'?'le mL':pr.unite==='dose'?'la dose':'la pièce'}</small></div>
+      <div class="step"><button data-qm="${pr.id}" data-step="${step}" aria-label="Moins"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round"><path d="M5 12h14"/></svg></button>
+      <span class="q" id="q-${pr.id}">${Q(val[pr.id])}<small>${esc(pr.unite||'')}</small></span>
+      <button data-qp="${pr.id}" data-step="${step}" aria-label="Plus"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></button></div></div>`;
+  };
+  const html = `
+    <p class="tiny muted" style="margin:0 0 8px">Ce qu’une séance de <b>${esc(p.nom)}</b> consomme. À chaque encaissement, le stock descend et le coût part dans tes charges</p>
+    <div class="lst">${prods.map(ligne).join('')}</div>
+    <div class="between" style="margin-top:12px;padding:12px 14px;background:var(--sauge-pale);border-radius:12px">
+      <b>Coût par séance</b><b class="num" style="font-size:19px" id="csTotal"></b>
+    </div>
+    <button class="btn" style="margin-top:14px" id="csSave">Enregistrer</button>`;
+  ouvrirSheet(court(p.nom), html);
+  const b = $('#shBody');
+  const total = () => { b.querySelector('#csTotal').textContent =
+    E2(prods.reduce((a,pr)=>a+val[pr.id]*Calc.prixUnite(pr),0)); };
+  total();
+  b.addEventListener('click', e=>{
+    const m = e.target.closest('[data-qm]'), pl = e.target.closest('[data-qp]');
+    if (!m && !pl) return;
+    const idp = (m||pl).dataset.qm || (m||pl).dataset.qp;
+    const st = Number((m||pl).dataset.step);
+    val[idp] = Math.max(0, val[idp] + (pl?st:-st));
+    b.querySelector('#q-'+CSS.escape(idp)).firstChild.textContent = Q(val[idp]);
+    total();
+  });
+  b.querySelector('#csSave').addEventListener('click', async ()=>{
+    for (const pr of prods){
+      const l = (S.consos||[]).find(x=>String(x.prestation_id)===String(pid)&&String(x.produit_id)===String(pr.id));
+      if (l){
+        if (val[pr.id] !== Number(l.quantite)) await DB.update('conso_prestations', l.id, { quantite: val[pr.id] });
+      } else if (val[pr.id] > 0){
+        await DB.insert('conso_prestations', { prestation_id: pid, produit_id: pr.id, quantite: val[pr.id] });
+      }
+    }
+    fermerSheet(); rendreTout(); toast('Conso du soin réglée');
+  });
+}
+
+/* ----- Charges ----- */
+function sheetCharge(id){
+  const c = id ? S.charges.find(x=>String(x.id)===String(id)) : null;
+  const html = `
+    <label class="f-l" for="chL">La charge</label>
+    <input class="f" id="chL" type="text" value="${esc(c?c.libelle:'')}" placeholder="Assurance, comptable…">
+    <div class="f2">
+      <div><label class="f-l" for="chM">Montant</label><input class="f" id="chM" type="number" inputmode="decimal" min="0" step="0.5" value="${c?Number(c.montant):''}"></div>
+      <div><label class="f-l" for="chT">Fréquence</label><select class="f" id="chT">
+        <option value="fixe_mensuelle" ${c&&c.type==='fixe_mensuelle'?'selected':''}>Par mois</option>
+        <option value="fixe_annuelle" ${c&&c.type==='fixe_annuelle'?'selected':''}>Par an</option>
+        <option value="ponctuelle" ${c&&c.type==='ponctuelle'?'selected':''}>Une seule fois</option>
+      </select></div>
+    </div>
+    <button class="btn" style="margin-top:16px" id="chSave">Enregistrer</button>
+    ${c?`<button class="btn sm danger" style="margin-top:8px" data-suppcharge="${c.id}">Supprimer</button>`:''}`;
+  ouvrirSheet(c ? c.libelle : 'Nouvelle charge', html);
+  $('#shBody').querySelector('#chSave').addEventListener('click', async ()=>{
+    const b = $('#shBody');
+    const row = { libelle:b.querySelector('#chL').value.trim(), montant:Number(b.querySelector('#chM').value||0),
+                  type:b.querySelector('#chT').value, actif:true };
+    if (!row.libelle) return toast('Il manque le nom');
+    if (c) await DB.update('charges', c.id, row);
+    else { row.date_debut = ymd(new Date()); await DB.insert('charges', row); }
+    fermerSheet(); rendreTout(); toast('Charge enregistrée');
+  });
+}
+
+/* ----- Prestations ----- */
+function sheetPrestation(id){
+  const p = id ? prest(id) : null;
+  const COULEURS = ['#5A6E6A','#7E9184','#C8A04A','#A8846B','#8A7A66','#B0A188','#6B8A96','#96716B'];
+  const html = `
+    <label class="f-l" for="psN">Le soin</label>
+    <input class="f" id="psN" type="text" value="${esc(p?p.nom:'')}">
+    <div class="f2">
+      <div><label class="f-l" for="psD">Durée (min)</label><input class="f" id="psD" type="number" inputmode="numeric" min="10" step="5" value="${p?p.duree_min:''}"></div>
+      <div><label class="f-l" for="psP">Prix</label><input class="f" id="psP" type="number" inputmode="decimal" min="0" value="${p?Number(p.prix):''}"></div>
+    </div>
+    <label class="f-l">Sa couleur dans l’agenda</label>
+    <div class="chips" id="psC">${COULEURS.map(c=>`<button class="chip ${p&&p.couleur===c?'on':''}" data-coul="${c}" aria-label="Couleur ${c}"><span style="width:17px;height:17px;border-radius:50%;background:${c};display:block"></span></button>`).join('')}</div>
+    <label class="f-l" style="display:flex;align-items:center;justify-content:space-between;min-height:44px">Proposé en ce moment
+      <input type="checkbox" id="psA" ${!p||p.actif!==false?'checked':''} style="width:22px;height:22px;accent-color:var(--sauge)"></label>
+    <button class="btn" style="margin-top:12px" id="psSave">Enregistrer</button>`;
+  ouvrirSheet(p ? p.nom : 'Nouveau soin', html);
+  const b = $('#shBody');
+  b.querySelector('#psC').addEventListener('click', e=>{
+    const x = e.target.closest('[data-coul]'); if (!x) return;
+    b.querySelectorAll('#psC .chip').forEach(y=>y.classList.remove('on')); x.classList.add('on');
+  });
+  b.querySelector('#psSave').addEventListener('click', async ()=>{
+    const chip = b.querySelector('#psC .chip.on');
+    const row = { nom:b.querySelector('#psN').value.trim(), duree_min:Number(b.querySelector('#psD').value||60),
+                  prix:Number(b.querySelector('#psP').value||0), couleur: chip?chip.dataset.coul:'#5A6E6A',
+                  actif: b.querySelector('#psA').checked };
+    if (!row.nom) return toast('Il manque le nom du soin');
+    if (p) await DB.update('prestations', p.id, row);
+    else { row.ordre = S.prestations.length+1; await DB.insert('prestations', row); }
+    fermerSheet(); sheetReglages(); rendreTout(); toast('Soin enregistré');
+  });
+}
+
+/* ----- Boîte de réception (résas automatiques) ----- */
+function sheetInbox(){
+  const bruts = S.bruts.filter(b=>!b.traite);
+  const html = bruts.length ? bruts.map(b=>{
+    const p = b.payload||{};
+    const d = p.date_heure ? new Date(p.date_heure) : null;
+    return `<div class="card tight">
+      <b>${esc(p.nom||'Sans nom')}</b>
+      <div class="tiny muted">${esc(p.soin||'Soin inconnu')}${d?` · ${JOURS3[d.getDay()]} ${d.getDate()} ${MOIS3[d.getMonth()]} ${hm(d)}`:''}${p.email?` · ${esc(p.email)}`:''}</div>
+      <div class="row" style="gap:8px;margin-top:10px">
+        <button class="btn sm" style="flex:1" data-valbrut="${b.id}">${ICO.check}Créer la séance</button>
+        <button class="btn sm ghost" style="flex:1" data-ignbrut="${b.id}">Ignorer</button>
+      </div>
+    </div>`;
+  }).join('') : vide('Rien à traiter', 'Les réservations reçues depuis ton site arrivent ici', ICO.inbox);
+  ouvrirSheet('Réservations reçues', html);
+}
+
+async function validerBrut(id){
+  const b = S.bruts.find(x=>String(x.id)===String(id)); if (!b) return;
+  const p = b.payload||{};
+  let c = S.clientes.find(x => p.email && x.email && x.email.toLowerCase()===String(p.email).toLowerCase())
+       || S.clientes.find(x => (x.prenom+' '+(x.nom||'')).trim().toLowerCase()===String(p.nom||'').trim().toLowerCase());
+  if (!c && p.nom){
+    const parts = String(p.nom).trim().split(/\s+/);
+    c = await DB.insert('clientes', { prenom:parts[0], nom:parts.slice(1).join(' '), tel:'', email:p.email||'', source:'site', notes:'' });
+  }
+  const pr = S.prestations.find(x => String(p.soin||'').toLowerCase().includes(court(x.nom).toLowerCase())
+                                   || x.nom.toLowerCase()===String(p.soin||'').toLowerCase())
+          || S.prestations[0];
+  const se = await DB.insert('seances', {
+    cliente_id: c?c.id:null, prestation_id: pr?pr.id:null,
+    date_heure: p.date_heure ? new Date(p.date_heure).toISOString() : new Date().toISOString(),
+    duree_min: pr?pr.duree_min:60, prix_facture: pr?Number(pr.prix):0,
+    statut:'prevue', mode_paiement:'', source: b.source==='mail'?'mail':'webhook', notes:'',
+  });
+  await DB.update('evenements_bruts', id, { traite:true, seance_id: se.id });
+  rendreTout(); sheetInbox(); toast('Séance créée');
+}
+
+/* ----- Réglages ----- */
+function sheetReglages(){
+  const r = S.reglages;
+  const heure = v => `${pad(Math.floor(v))}:${pad(Math.round((v%1)*60))}`;
+  const jl = [1,2,3,4,5,6,0];
+  const html = `
+    <div class="card-t" style="margin-top:2px">Mes horaires</div>
+    ${jl.map(j=>{
+      const c = (r.horaires||{})[String(j)];
+      const on = Array.isArray(c);
+      return `<div class="row" style="min-height:48px;gap:9px">
+        <label style="flex:1;display:flex;align-items:center;gap:9px;text-transform:capitalize;font-weight:600;font-size:14px">
+          <input type="checkbox" data-hj="${j}" ${on?'checked':''} style="width:21px;height:21px;accent-color:var(--sauge)">${JOURS[j]}</label>
+        <input class="f" style="width:108px;min-height:42px;padding:0 8px" type="time" data-hd="${j}" value="${on?heure(c[0]):'14:00'}" ${on?'':'disabled'} aria-label="Ouverture ${JOURS[j]}">
+        <input class="f" style="width:108px;min-height:42px;padding:0 8px" type="time" data-hf="${j}" value="${on?heure(c[1]):'20:00'}" ${on?'':'disabled'} aria-label="Fermeture ${JOURS[j]}">
+      </div>`;
+    }).join('')}
+
+    <div class="card-t" style="margin-top:18px">Mes soins</div>
+    <div class="lst">${S.prestations.slice().sort((a,b)=>(a.ordre||0)-(b.ordre||0)).map(p=>`
+      <button class="it" data-editprest="${p.id}">
+        <span class="dot" style="width:10px;height:10px;border-radius:50%;background:${p.couleur};flex:none"></span>
+        <div class="m"><b>${esc(p.nom)}${p.actif===false?' · en pause':''}</b><small>${p.duree_min} min</small></div>
+        <div class="v">${E(p.prix)}</div></button>`).join('')}
+    </div>
+    <button class="btn sm ghost" id="addPrest" style="margin-top:8px">${ICO.plus}Ajouter un soin</button>
+
+    <div class="card-t" style="margin-top:18px">Le local et le battement</div>
+    <div class="f2">
+      <div><label class="f-l" for="rgLoc">Tarif horaire du local</label><input class="f" id="rgLoc" type="number" inputmode="decimal" min="0" step="0.5" value="${Number(r.tarif_local_h)}"></div>
+      <div><label class="f-l" for="rgArr">Facturé</label><select class="f" id="rgArr">
+        <option value="reelle" ${r.arrondi_local==='reelle'?'selected':''}>À la minute</option>
+        <option value="demi" ${r.arrondi_local==='demi'?'selected':''}>Demi-heure entamée</option>
+        <option value="heure" ${r.arrondi_local==='heure'?'selected':''}>Heure entamée</option>
+      </select></div>
+    </div>
+    <label class="f-l" for="rgBatt">Battement entre deux clientes (min)</label>
+    <input class="f" id="rgBatt" type="number" inputmode="numeric" min="0" step="5" value="${Number(r.battement_min)}">
+
+    <div class="card-t" style="margin-top:18px">Les cotisations</div>
+    <div class="f2">
+      <div><label class="f-l" for="rgTx">Taux (%)</label><input class="f" id="rgTx" type="number" inputmode="decimal" min="0" step="0.1" value="${Number(r.taux_cotisations)}"></div>
+      <div><label class="f-l" for="rgPl">Plafond CA annuel</label><input class="f" id="rgPl" type="number" inputmode="numeric" min="0" step="100" value="${Number(r.plafond_ca)}"></div>
+    </div>
+    <label class="f-l" for="rgTxL">Ton régime (pour mémoire)</label>
+    <input class="f" id="rgTxL" type="text" value="${esc(r.taux_libelle||'')}">
+    <p class="mini" style="margin:6px 0 0">Taux à faire confirmer par ton comptable — ACRE, versement libératoire ou changement d’année le font bouger</p>
+
+    <div class="card-t" style="margin-top:18px">Les relances</div>
+    <label class="f-l" for="rgRel">Me proposer une relance après (jours sans visite)</label>
+    <input class="f" id="rgRel" type="number" inputmode="numeric" min="7" step="1" value="${Number(r.relance_jours||30)}">
+    <label class="f-l" for="rgMsg">Le message type</label>
+    <textarea class="f" id="rgMsg">${esc(r.relance_msg||'')}</textarea>
+    <p class="mini" style="margin:6px 0 0">{prenom}, {soin} et {temps} se remplissent tout seuls pour chaque cliente</p>
+
+    <button class="btn" style="margin-top:18px" id="rgSave">Enregistrer les réglages</button>
+
+    <div class="card-t" style="margin-top:20px">Mes données</div>
+    <button class="btn sm ghost" id="rgCSV">Exporter mes séances (CSV)</button>
+    ${DB.mode==='demo'
+      ? `<button class="btn sm ghost" style="margin-top:8px" id="rgReset">Réinitialiser la démo</button>
+         <p class="mini" style="margin:10px 0 0;text-align:center">Mode démo : tout vit dans ce navigateur, rien n’est en ligne</p>`
+      : `<button class="btn sm ghost" style="margin-top:8px" id="rgOut">Me déconnecter</button>`}`;
+  ouvrirSheet('Réglages', html);
+  const b = $('#shBody');
+  b.addEventListener('change', e=>{
+    const cb = e.target.closest('[data-hj]'); if (!cb) return;
+    const j = cb.dataset.hj;
+    b.querySelector(`[data-hd="${j}"]`).disabled = !cb.checked;
+    b.querySelector(`[data-hf="${j}"]`).disabled = !cb.checked;
+  });
+  b.querySelector('#addPrest').addEventListener('click', ()=>sheetPrestation(null));
+  b.querySelector('#rgCSV').addEventListener('click', exporterCSV);
+  if (b.querySelector('#rgReset')) b.querySelector('#rgReset').addEventListener('click', ()=>{
+    if (confirm('Repartir sur une démo toute propre ? Tes modifications de démo seront perdues.')){
+      localStorage.removeItem(LS); location.reload();
+    }
+  });
+  if (b.querySelector('#rgOut')) b.querySelector('#rgOut').addEventListener('click', ()=>Auth.logout());
+  b.querySelector('#rgSave').addEventListener('click', async ()=>{
+    const horaires = {};
+    for (const j of jl){
+      const cb = b.querySelector(`[data-hj="${j}"]`);
+      if (cb.checked){
+        const dv = b.querySelector(`[data-hd="${j}"]`).value || '14:00';
+        const fv = b.querySelector(`[data-hf="${j}"]`).value || '20:00';
+        const dec = v => Number(v.split(':')[0]) + Number(v.split(':')[1])/60;
+        horaires[String(j)] = [dec(dv), dec(fv)];
+      }
+    }
+    await DB.majReglages({
+      tarif_local_h: Number(b.querySelector('#rgLoc').value||0),
+      arrondi_local: b.querySelector('#rgArr').value,
+      battement_min: Number(b.querySelector('#rgBatt').value||0),
+      taux_cotisations: Number(b.querySelector('#rgTx').value||0),
+      plafond_ca: Number(b.querySelector('#rgPl').value||0),
+      taux_libelle: b.querySelector('#rgTxL').value.trim(),
+      relance_jours: Number(b.querySelector('#rgRel').value||30),
+      relance_msg: b.querySelector('#rgMsg').value,
+      horaires,
+    });
+    fermerSheet(); rendreTout(); toast('Réglages enregistrés');
+  });
+}
+
+/* ----- Séances passées à encaisser ----- */
+const seancesEnRetard = () => S.seances.filter(s => s.statut==='prevue' && new Date(s.date_heure).getTime() + s.duree_min*60000 < Date.now())
+  .sort((a,b)=>new Date(b.date_heure)-new Date(a.date_heure));
+
+function sheetRetard(){
+  const retard = seancesEnRetard();
+  const total = retard.reduce((a,s)=>a+Number(s.prix_facture||0),0);
+  ouvrirSheet('À encaisser',
+    `<p class="tiny muted" style="margin:0 0 10px">Ces séances sont passées mais toujours « prévues ». Si toutes les clientes sont bien venues et ont payé en espèces, un seul tap suffit — sinon règle-les une par une (annulée, absente…)</p>`
+    + (retard.length
+      ? `<button class="btn gold" style="margin-bottom:12px" data-toutencaisser="1">${ICO.check}Tout encaisser en espèces — ${E(total)}</button>`
+        + retard.map(s=>carteSeance(s,{plein:true})).join('')
+      : vide('Tout est à jour','Rien ne traîne, tes chiffres sont justes')));
+}
+
+/** Le geste du soir : toutes les séances passées → encaissées en espèces, d'un tap. */
+async function encaisserTout(){
+  if (_statutEnCours) return;
+  _statutEnCours = true;
+  let n = 0, total = 0;
+  try {
+    for (const s of seancesEnRetard()){
+      await DB.update('seances', s.id, { statut:'honoree', mode_paiement:'especes' });
+      await Calc.bougerStock(seance(s.id), +1);
+      n++; total += Number(s.prix_facture||0);
+    }
+  } finally { _statutEnCours = false; }
+  fermerSheet(); rendreTout();
+  toast(n ? `${n} séance${n>1?'s':''} encaissée${n>1?'s':''} — ${E(total)} en espèces` : 'Rien à encaisser');
+}
+
+/* ========================= Export ========================= */
+function exporterCSV(){
+  const lignes = [['date','heure','cliente','soin','duree_min','prix','statut','paiement'].join(';')];
+  for (const s of S.seances.slice().sort((a,b)=>new Date(a.date_heure)-new Date(b.date_heure))){
+    const d = new Date(s.date_heure), p = prest(s.prestation_id);
+    lignes.push([ymd(d), hm(d), `"${nomCli(s.cliente_id).replace(/"/g,'""')}"`, `"${(p?p.nom:'').replace(/"/g,'""')}"`,
+      s.duree_min, String(s.prix_facture).replace('.',','), s.statut, s.mode_paiement||''].join(';'));
+  }
+  const blob = new Blob(['﻿'+lignes.join('\n')], {type:'text/csv;charset=utf-8'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = `mon-salon-seances-${ymd(new Date())}.csv`;
+  a.click(); URL.revokeObjectURL(a.href);
+  toast('Export téléchargé');
+}
+
+/* ========================= Rendu global ========================= */
+function rendreTout(){
+  if (S.tab==='jour') rendreJour();
+  else if (S.tab==='agenda') rendreAgenda();
+  else if (S.tab==='clientes') rendreClientes();
+  else if (S.tab==='stock') rendreStock();
+  else if (S.tab==='argent') rendreArgent();
+  /* les pastilles vivent sur la nav, quel que soit l'écran */
+  $('#dotCli').classList.toggle('hidden', !Calc.relancesDues().length);
+  $('#dotStock').classList.toggle('hidden', !Calc.produitsBas().length);
+}
+
+function allerA(tab){
+  S.tab = tab;
+  $$('.scr').forEach(s=>s.classList.remove('on'));
+  $('#scr-'+tab).classList.add('on');
+  $$('.nav button').forEach(b=>b.classList.toggle('on', b.dataset.tab===tab));
+  $('#fab').classList.toggle('hidden', tab!=='jour' && tab!=='agenda');
+  window.scrollTo({top:0, behavior:'instant'});
+  rendreTout();
+}
+
+/* ========================= Événements ========================= */
+function brancher(){
+  $('#navIn').addEventListener('click', e=>{
+    const b = e.target.closest('[data-tab]'); if (b) allerA(b.dataset.tab);
+  });
+  $('#fab').addEventListener('click', ()=>{
+    const pre = {};
+    if (S.tab==='agenda' && S.aVue==='jour' && !sameDay(S.aRef,new Date())){
+      const d = new Date(S.aRef); d.setHours(14,0,0,0); pre.date = d;
+    }
+    sheetAjout(pre);
+  });
+  $('#btnReglages').addEventListener('click', sheetReglages);
+  $('#btnNewCli').addEventListener('click', ()=>sheetClienteEdit(null));
+  $('#btnNewProd').addEventListener('click', ()=>sheetProduit(null));
+  $('#btnExport').addEventListener('click', exporterCSV);
+  $('#ov').addEventListener('click', fermerSheet);
+  $('#shClose').addEventListener('click', fermerSheet);
+  $('#aToday').addEventListener('click', ()=>{ S.aRef = new Date(); rendreAgenda(); });
+
+  $('#aSeg').addEventListener('click', e=>{
+    const b = e.target.closest('[data-vue]'); if (!b) return;
+    S.aVue = b.dataset.vue; rendreAgenda();
+  });
+  $('#aPrev').addEventListener('click', ()=>{ bougePeriode(-1); });
+  $('#aNext').addEventListener('click', ()=>{ bougePeriode(1); });
+  function bougePeriode(sens){
+    const d = new Date(S.aRef);
+    if (S.aVue==='mois'){ d.setDate(15); d.setMonth(d.getMonth()+sens); } else d.setDate(d.getDate()+7*sens);
+    S.aRef = d; rendreAgenda();
+  }
+
+  $('#arSeg').addEventListener('click', e=>{
+    const b = e.target.closest('[data-vue]'); if (!b) return;
+    S.arVue = b.dataset.vue; rendreArgent();
+  });
+  $('#arPrev').addEventListener('click', ()=>{ bougeArgent(-1); });
+  $('#arNext').addEventListener('click', ()=>{ bougeArgent(1); });
+  function bougeArgent(sens){
+    const d = new Date(S.arRef);
+    if (S.arPer==='mois'){ d.setDate(15); d.setMonth(d.getMonth()+sens); }
+    else if (S.arPer==='annee') d.setFullYear(d.getFullYear()+sens);
+    else d.setDate(d.getDate()+7*sens);
+    S.arRef = d; rendreArgent();
+  }
+  $('#arLbl').addEventListener('click', ()=>{
+    S.arPer = S.arPer==='mois' ? 'semaine' : S.arPer==='semaine' ? 'annee' : 'mois';
+    S.arRef = new Date(); rendreArgent();
+    toast(S.arPer==='mois'?'Par mois':S.arPer==='semaine'?'Par semaine':'Par année');
+  });
+
+  $('#cliSeg').addEventListener('click', e=>{
+    const b = e.target.closest('[data-f]'); if (!b) return;
+    S.cliFiltre = b.dataset.f; rendreClientes();
+  });
+  $('#cliQ').addEventListener('input', ()=>{ S.cliQ = $('#cliQ').value; rendreClientes(); });
+
+  /* Délégation générale : les listes se re-rendent, le document reste. */
+  document.addEventListener('click', async e=>{
+    const t = sel => e.target.closest(sel);
+    let x;
+    if (x = t('[data-todo]')){
+      const todo = $('#jTodo')._todo?.[Number(x.dataset.todo)]; if (!todo) return;
+      if (todo.act==='inbox') return sheetInbox();
+      if (todo.act==='retard') return sheetRetard();
+      if (todo.tab){ if (todo.filtre) S.cliFiltre = todo.filtre; allerA(todo.tab); }
+      return;
+    }
+    if (x = t('[data-jour]')){ S.aRef = new Date(x.dataset.jour + 'T12:00'); return rendreAgenda(); }
+    if (x = t('[data-encaisser]')) return sheetSeance(x.dataset.encaisser);
+    if (x = t('[data-seance]'))    return sheetSeance(x.dataset.seance);
+    if (x = t('[data-fiche]'))     return sheetCliente(x.dataset.fiche);
+    if (x = t('[data-cli]'))       return sheetCliente(x.dataset.cli);
+    if (x = t('[data-editcli]'))   return sheetClienteEdit(x.dataset.editcli);
+    if (x = t('[data-newseance]')){ fermerSheet(); return sheetAjout({cliente_id:x.dataset.newseance}); }
+    if (x = t('[data-relance]'))   return sheetRelance(x.dataset.relance);
+    if (x = t('[data-relancee]')){
+      await DB.update('clientes', x.dataset.relancee, { derniere_relance: new Date().toISOString() });
+      fermerSheet(); rendreTout(); return toast('Relance notée — elle est sortie de la liste');
+    }
+    if (x = t('[data-libre]')){ const d = new Date(x.dataset.libre); return sheetAjout({date:d}); }
+    if (x = t('[data-prod]'))      return sheetProduit(x.dataset.prod);
+    if (x = t('[data-rachat]')){
+      const p = prod(x.dataset.rachat); if (!p) return;
+      await DB.update('produits', p.id, { stock: Number(p.stock||0) + Number(p.contenance||0) });
+      rendreTout(); return toast(`+ ${Q(p.contenance)} ${uTxt(p.contenance,p.unite)} · ${p.libelle}`);
+    }
+    if (x = t('[data-soin]'))      return sheetConsoSoin(x.dataset.soin);
+    if (x = t('[data-charge]'))    return sheetCharge(x.dataset.charge);
+    if (x = t('#addCharge')){ e.preventDefault(); return sheetCharge(null); }
+    if (x = t('[data-va]')){ e.preventDefault(); return allerA(x.dataset.va); }
+    if (x = t('[data-editprest]')) return sheetPrestation(x.dataset.editprest);
+    if (x = t('[data-editseance]')) return sheetSeanceEdit(x.dataset.editseance);
+    if (x = t('[data-valbrut]'))   return validerBrut(x.dataset.valbrut);
+    if (x = t('[data-ignbrut]')){
+      await DB.update('evenements_bruts', x.dataset.ignbrut, { traite:true });
+      rendreTout(); return sheetInbox();
+    }
+    if (x = t('[data-toutencaisser]')) return encaisserTout();
+    if (x = t('[data-pay]')){
+      const id = $('#shBody').dataset.seanceId;
+      if (id) return changerStatut(id, 'honoree', x.dataset.pay);
+    }
+    if (x = t('[data-statut]')){
+      const id = $('#shBody').dataset.seanceId;
+      if (id) return changerStatut(id, x.dataset.statut);
+    }
+    if (x = t('[data-suppseance]')){
+      if (!confirm('Supprimer cette séance ?')) return;
+      const s = seance(x.dataset.suppseance);
+      if (s && s.statut==='honoree') await Calc.bougerStock(s, -1);
+      await DB.remove('seances', x.dataset.suppseance);
+      fermerSheet(); rendreTout(); return toast('Séance supprimée');
+    }
+    if (x = t('[data-suppcli]')){
+      if (!confirm('Supprimer cette fiche ? Ses séances restent, sans nom.')) return;
+      await DB.remove('clientes', x.dataset.suppcli);
+      fermerSheet(); rendreTout(); return toast('Fiche supprimée');
+    }
+    if (x = t('[data-suppprod]')){
+      if (!confirm('Supprimer ce produit ? Les soins qui l’utilisaient ne le compteront plus.')) return;
+      for (const l of (S.consos||[]).filter(l=>String(l.produit_id)===String(x.dataset.suppprod)))
+        await DB.remove('conso_prestations', l.id);
+      await DB.remove('produits', x.dataset.suppprod);
+      fermerSheet(); rendreTout(); return toast('Produit supprimé');
+    }
+    if (x = t('[data-suppcharge]')){
+      if (!confirm('Supprimer cette charge ?')) return;
+      await DB.remove('charges', x.dataset.suppcharge);
+      fermerSheet(); rendreTout(); return toast('Charge supprimée');
+    }
+    if (x = t('[data-sm]')||t('[data-sp]')){
+      const plus = !!t('[data-sp]');
+      const pid = plus ? t('[data-sp]').dataset.sp : t('[data-sm]').dataset.sm;
+      S.simuCounts[pid] = Math.max(0, (S.simuCounts[pid] ?? 1) + (plus?1:-1));
+      return rendreSimu();
+    }
+    if (x = t('[data-simu]')){ S.simuMode = x.dataset.simu; return rendreSimu(); }
+  });
+
+  /* Le simulateur écoute ses champs en direct */
+  document.addEventListener('input', e=>{
+    if (e.target.id !== 'objInput' && e.target.id !== 'batt') return;
+    if (e.target.id === 'batt'){
+      const el = document.getElementById('battV'); if (el) el.textContent = e.target.value + ' min';
+    }
+    const obj = document.getElementById('objInput'), bat = document.getElementById('batt');
+    const focusId = document.activeElement && document.activeElement.id;
+    clearTimeout(window._simH);
+    window._simH = setTimeout(()=>{
+      /* une seule écriture + un seul re-rendu, une fois la saisie posée */
+      DB.majReglages({ objectif_net: Number(obj?obj.value:0)||0, battement_min: Number(bat?bat.value:0)||0 });
+      rendreSimu();
+      const el = focusId && document.getElementById(focusId);
+      if (el) el.focus();
+    }, 600);
+  });
+}
+
+/* ========================= Données de démonstration ========================= */
+function seedDemo(){
+  let g = 20260811;
+  const rnd = () => { g = (g*1103515245 + 12345) & 0x7fffffff; return g/0x7fffffff; };
+  const pick = a => a[Math.floor(rnd()*a.length)];
+
+  const prestations = [
+    { id:uid(), nom:'Massage Signature',           duree_min:90, prix:120, couleur:'#5A6E6A', ordre:1, actif:true },
+    { id:uid(), nom:"Les Rituels d'Été",           duree_min:90, prix:120, couleur:'#7E9184', ordre:2, actif:true },
+    { id:uid(), nom:'Massage profond et relaxant', duree_min:60, prix:80,  couleur:'#C8A04A', ordre:3, actif:true },
+    { id:uid(), nom:'Rituel Dos & Jambes',         duree_min:45, prix:60,  couleur:'#A8846B', ordre:4, actif:true },
+    { id:uid(), nom:'Rituel Dos & Nuque',          duree_min:30, prix:50,  couleur:'#8A7A66', ordre:5, actif:true },
+    { id:uid(), nom:'Rituel Jambes',               duree_min:30, prix:50,  couleur:'#B0A188', ordre:6, actif:true },
+  ];
+  const poids = [
+    [prestations[3], 30], [prestations[2], 24], [prestations[0], 16],
+    [prestations[4], 13], [prestations[5], 10], [prestations[1], 7],
+  ];
+  const tirage = [];
+  poids.forEach(([p,n]) => { for (let i=0;i<n;i++) tirage.push(p); });
+
+  /* Produits + ce que chaque soin consomme (ordres de grandeur, à corriger avec elle) */
+  const produits = [
+    { id:uid(), libelle:'Huile de massage', unite:'mL',    contenance:1000, prix_achat:32, stock:260, seuil:300, ordre:1, actif:true },
+    { id:uid(), libelle:'Draps et protections', unite:'unité', contenance:50, prix_achat:25, stock:31, seuil:10, ordre:2, actif:true },
+    { id:uid(), libelle:'Lessive et entretien', unite:'dose',  contenance:20, prix_achat:19, stock:13, seuil:4,  ordre:3, actif:true },
+  ];
+  const mlParDuree = { 90:40, 60:30, 45:25, 30:18 };
+  const conso_prestations = [];
+  for (const p of prestations){
+    conso_prestations.push({ id:uid(), prestation_id:p.id, produit_id:produits[0].id, quantite: mlParDuree[p.duree_min]||25 });
+    conso_prestations.push({ id:uid(), prestation_id:p.id, produit_id:produits[1].id, quantite: 1 });
+    conso_prestations.push({ id:uid(), prestation_id:p.id, produit_id:produits[2].id, quantite: 1 });
+  }
+
+  const prenoms = ['Marion','Eva','Élodie','Audrey','Camille','Sarah','Julie','Anaïs','Chloé','Manon',
+                   'Léa','Clara','Emma','Alice','Lucie','Charlotte','Pauline','Justine','Amandine','Céline',
+                   'Mathilde','Ophélie','Delphine','Nadia','Sophie','Laure','Marine','Estelle'];
+  const noms = ['J.','T.','B.','S.','M.','L.','D.','R.','P.','C.','V.','F.'];
+  const clientes = prenoms.map((p,i) => ({
+    id:uid(), prenom:p, nom:noms[i % noms.length],
+    tel: '06 ' + [1,2,3,4].map(()=>pad(Math.floor(rnd()*100))).join(' '),
+    email: p.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'') + '@exemple.fr',
+    source: pick(['site','instagram','bouche-a-oreille','google','inconnu']),
+    notes: pick(['Pression forte, insiste sur les trapèzes','Aime le silence, lumière tamisée',
+                 'Sensible au niveau des lombaires','Préfère l’huile neutre','Vient toujours le dimanche matin','']),
+    relance_off:false, derniere_relance:null,
+    created_at: new Date().toISOString(),
+  }));
+
+  /* Cinq clientes volontairement « anciennes » pour nourrir l'écran relances,
+     deux qui ne veulent pas être recontactées. */
+  const anciennes = new Set([clientes[23].id, clientes[24].id, clientes[25].id, clientes[26].id, clientes[27].id]);
+  clientes[10].relance_off = true;
+
+  const seances = [];
+  const fin = new Date();
+  const debut = new Date(); debut.setMonth(debut.getMonth()-4);
+  const HOR = { 5:[14.5,20], 6:[13,20], 0:[10,16] };
+  const recentes = clientes.filter(c=>!anciennes.has(c.id));
+  const vieilles = clientes.filter(c=>anciennes.has(c.id));
+
+  for (let d = new Date(debut); d <= fin; d.setDate(d.getDate()+1)){
+    const plage = HOR[d.getDay()]; if (!plage) continue;
+    const [ho, hf] = plage, dispo = hf - ho;
+    const cible = dispo * (0.35 + rnd()*0.5);
+    let curseur = ho, consomme = 0, garde = 0;
+    const vieuxJour = (fin - d)/86400000 > 45;   // les « anciennes » n'apparaissent que sur les vieux jours
+    while (consomme < cible && curseur < hf - 0.5 && garde++ < 12){
+      const p = pick(tirage);
+      const h = (p.duree_min + 15)/60;
+      if (curseur + h > hf) break;
+      const dt = new Date(d.getFullYear(), d.getMonth(), d.getDate(),
+                          Math.floor(curseur), Math.round((curseur%1)*60));
+      const passe = dt < new Date();
+      const r = rnd();
+      const statut = !passe ? 'prevue' : r < 0.045 ? 'annulee' : r < 0.062 ? 'noshow' : 'honoree';
+      const prix = r > 0.965 ? Number(p.prix) - 10 : Number(p.prix);
+      const qui = (vieuxJour && rnd() < 0.28) ? pick(vieilles) : pick(recentes);
+      seances.push({
+        id:uid(), cliente_id: qui.id, prestation_id: p.id,
+        date_heure: dt.toISOString(), duree_min: p.duree_min, prix_facture: prix,
+        statut, mode_paiement: statut==='honoree' ? pick(['cb','cb','especes','virement','bon_cadeau']) : '',
+        source:'manuelle', notes:'', created_at: new Date().toISOString(),
+      });
+      curseur += h; consomme += h;
+    }
+  }
+  /* Des rendez-vous à venir pour les prochains jours ouverts */
+  let futurs = 0;
+  for (let i = 1; i <= 10 && futurs < 7; i++){
+    const d = addD(new Date(), i);
+    if (!HOR[d.getDay()]) continue;
+    const nb = 2 + Math.floor(rnd()*3);
+    let h = HOR[d.getDay()][0];
+    for (let k=0;k<nb;k++){
+      const p = pick(tirage);
+      const dt = new Date(d.getFullYear(), d.getMonth(), d.getDate(), Math.floor(h), Math.round((h%1)*60));
+      if (h + (p.duree_min+15)/60 > HOR[d.getDay()][1]) break;
+      seances.push({ id:uid(), cliente_id: pick(recentes).id, prestation_id: p.id,
+        date_heure: dt.toISOString(), duree_min: p.duree_min, prix_facture: Number(p.prix),
+        statut:'prevue', mode_paiement:'', source:'manuelle', notes:'', created_at:new Date().toISOString() });
+      h += (p.duree_min + 15)/60 + (rnd()<0.4 ? 0.5 : 0);
+      futurs++;
+    }
+  }
+  /* Si le salon est ouvert aujourd'hui, la démo doit le montrer vivant */
+  const auj = new Date();
+  if (HOR[auj.getDay()]){
+    const [ho] = HOR[auj.getDay()];
+    const dejaAuj = seances.some(s => sameDay(new Date(s.date_heure), auj) && s.statut==='prevue');
+    if (!dejaAuj){
+      const p = tirage[0];
+      const dt = new Date(auj.getFullYear(), auj.getMonth(), auj.getDate(), Math.max(new Date().getHours()+1, Math.floor(ho)), 0);
+      seances.push({ id:uid(), cliente_id: recentes[0].id, prestation_id: p.id,
+        date_heure: dt.toISOString(), duree_min: p.duree_min, prix_facture: Number(p.prix),
+        statut:'prevue', mode_paiement:'', source:'manuelle', notes:'', created_at:new Date().toISOString() });
+    }
+  }
+
+  const charges = [
+    { id:uid(), libelle:'Assurance RC professionnelle', type:'fixe_annuelle', montant:180, actif:true, date_debut:ymd(debut) },
+    { id:uid(), libelle:'Abonnement Systeme.io',        type:'fixe_mensuelle', montant:27,  actif:true, date_debut:ymd(debut) },
+    { id:uid(), libelle:'Téléphone et internet',        type:'fixe_mensuelle', montant:25,  actif:true, date_debut:ymd(debut) },
+  ];
+
+  const bruts = [{
+    id:uid(), source:'mail', evenement:'resa', traite:false,
+    payload:{ nom:'Céline M.', soin:'Massage profond et relaxant',
+              date_heure: isoLocal(addD(new Date(),2)), email:'celine@exemple.fr' },
+    received_at:new Date().toISOString()
+  }];
+
+  return { prestations, clientes, seances, charges, produits, conso_prestations,
+           evenements_bruts:bruts, reglages: Object.assign({}, REGLAGES_DEFAUT) };
+}
+
+/* ========================= Démarrage ========================= */
+async function demarrer(){
+  if (DB.mode === 'cloud' && !(await Auth.valide())){
+    $('#login').classList.remove('hidden');
+    $('#lgBtn').onclick = async () => {
+      const b = $('#lgBtn'), code = $('#lgCode').value;
+      if (!code) return;
+      b.disabled = true; b.textContent = 'Un instant…';
+      let derniere = '';
+      for (const email of (CONFIG.COMPTES || [])){
+        try { await Auth.login(email, code); location.reload(); return; }
+        catch(e){ derniere = e.message; }
+      }
+      const fr = /invalid login credentials/i.test(derniere) ? 'Ce code ne correspond pas'
+               : /email not confirmed/i.test(derniere) ? 'Compte pas encore confirmé — vois avec Geoffrey'
+               : /rate limit/i.test(derniere) ? 'Trop d’essais — attends une minute'
+               : derniere || 'Connexion impossible';
+      $('#lgErr').textContent = fr; $('#lgErr').classList.remove('hidden');
+      b.disabled = false; b.textContent = 'Entrer';
+    };
+    $('#lgCode').onkeydown = e => { if (e.key === 'Enter') $('#lgBtn').click(); };
+    return;
+  }
+  try { await DB.chargerTout(); }
+  catch(e){
+    document.body.innerHTML = `<div class="login"><div class="alert">Impossible de charger les données.<br><br>${esc(e.message)}</div>
+      <button class="btn" onclick="location.reload()">Réessayer</button>
+      <button class="btn danger" style="margin-top:10px" onclick="if(confirm('Tout effacer et repartir de zéro ? Cette action est définitive.')){localStorage.clear();location.reload()}">Tout effacer et repartir de zéro</button></div>`;
+    return;
+  }
+  if (DB.mode==='demo') $('#demoTag').classList.remove('hidden');
+  $('#app').classList.remove('hidden');
+  brancher(); allerA('jour');
+  if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(()=>{});
+}
+window.addEventListener('unhandledrejection', e => {
+  e.preventDefault();
+  toast('Ça n’a pas été enregistré — vérifie le réseau et réessaie');
+});
+demarrer();
+</script>
+</body>
+</html>

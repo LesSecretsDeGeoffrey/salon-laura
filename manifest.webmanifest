@@ -1,0 +1,20 @@
+{
+  "name": "Mon salon — Laura Yoga Massages",
+  "short_name": "Mon salon",
+  "description": "Suivi des séances, du chiffre d'affaires et des charges du salon.",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#FAF6F1",
+  "theme_color": "#5A6E6A",
+  "lang": "fr",
+  "icons": [
+    {
+      "src": "icone.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
