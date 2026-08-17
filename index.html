@@ -489,7 +489,7 @@ select.f{-webkit-appearance:none;appearance:none;background-image:url("data:imag
     <div class="card">
       <div class="card-t">Ce que consomme chaque soin</div>
       <div id="stSoins"></div>
-      <p class="tiny muted" style="margin:10px 0 0">Chaque encaissement descend le stock tout seul et compte le coût exact du soin dans tes charges. Tape un soin pour régler ses quantités</p>
+      <p class="tiny muted" style="margin:10px 0 0">Chaque encaissement descend le stock tout seul, pour te prévenir avant la panne. Le coût par soin est indicatif : ce qui compte dans tes charges, ce sont tes achats. Tape un soin pour régler ses quantités</p>
     </div>
   </section>
 
@@ -618,7 +618,7 @@ function toast(msg){ const t=$('#toast'); t.textContent=msg; t.classList.add('on
 
 /* ========================= État ========================= */
 const S = {
-  prestations: [], clientes: [], seances: [], charges: [], produits: [], consos: [], reglages: {}, bruts: [],
+  prestations: [], clientes: [], seances: [], charges: [], produits: [], consos: [], achats: [], reglages: {}, bruts: [],
   tab: 'jour',
   aVue: 'jour', aRef: new Date(),
   arVue: 'resultats', arPer: 'mois', arRef: new Date(),
@@ -637,7 +637,7 @@ const REGLAGES_DEFAUT = {
 /* ========================= Stockage ========================= */
 const CLOUD = /^https?:\/\//.test(CONFIG.SUPABASE_URL) && CONFIG.SUPABASE_KEY.length > 10;
 const LS = 'laura-salon-v2';
-const TABLES = ['prestations','clientes','seances','charges','produits','conso_prestations','reglages','evenements_bruts'];
+const TABLES = ['prestations','clientes','seances','charges','produits','conso_prestations','achats','reglages','evenements_bruts'];
 
 const Auth = {
   get tok(){ try { return JSON.parse(localStorage.getItem(LS+'-auth')||'null'); } catch(e){ return null; } },
@@ -805,6 +805,13 @@ const Calc = {
       return a + Number(x.quantite||0) * Calc.prixUnite(p);
     }, 0);
   },
+
+  /** Ce que Laura a dépensé en produits sur la période : la somme de ses achats datés.
+      C'est ça qui entre dans les charges — le mois où l'argent sort, comme en compta réelle. */
+  achatsDe(from, to){
+    return (S.achats||[]).filter(a => { const d = new Date(a.date_achat + 'T12:00'); return d >= sod(from) && d <= to; });
+  },
+  coutAchats(from, to){ return Calc.achatsDe(from, to).reduce((a,x)=>a+Number(x.montant||0), 0); },
 
   /** Coût conso moyen par séance au mix des 90 derniers jours (pour les projections). */
   consoMoyenne(r = S.reglages){
@@ -977,7 +984,7 @@ const Calc = {
     const localSeances = honorees.reduce((a,s)=>a+Calc.coutLocal(s.duree_min, r), 0);
     const localMois = Calc.localMois(from, to, r);
     const local = localSeances + localMois;
-    const conso = honorees.reduce((a,s)=>a+Calc.consoPrestation(s.prestation_id, r), 0);
+    const conso = Calc.coutAchats(from, to);          // les achats du mois, pas une théorie au mL
     const fixes = Calc.chargesFixes(from, to);
     const net   = ca - cotis - local - conso - fixes;
 
@@ -1225,7 +1232,7 @@ function rendreJour(){
   const st = Calc.periode(sod(d), eod(d));
   const prevues = st.toutes.filter(s=>s.statut==='prevue');
   const aVenir  = prevues.reduce((a,s)=>a+Number(s.prix_facture||0),0);
-  const netJour = st.ca - st.cotis - st.localSeances - st.conso;
+  const netJour = st.ca - st.cotis - st.localSeances - st.conso;   // st.conso = achats saisis ce jour-là
   $('#jStats').innerHTML = `
     <div class="jstat stag"><div class="v">${E(st.ca)}</div><div class="l">Encaissé</div></div>
     <div class="jstat stag"><div class="v">${E(aVenir)}</div><div class="l">Encore prévu</div></div>
@@ -1486,7 +1493,7 @@ function rendreStock(){
       <div class="gauge"><i class="${si.vide?'ko':si.bas?'warn':''}" style="width:${Math.max(3,si.pct)}%"></i></div>
       <div class="between"><span class="mini">${Q(si.stock)} ${uTxt(si.stock,p.unite)} en stock</span><span class="mini">${si.seuil?`alerte sous ${Q(si.seuil)} ${uTxt(si.seuil,p.unite)}`:''}</span></div>
       <div class="act">
-        <button class="sbtn" data-rachat="${p.id}">${ICO.cart}J’ai racheté</button>
+        <button class="sbtn" data-rachat="${p.id}">${ICO.cart}J’ai acheté</button>
         <button class="sbtn" data-prod="${p.id}">${ICO.pen}Modifier</button>
       </div>
     </div>`;
@@ -1532,7 +1539,7 @@ function rendreResultats(){
     </div>
     <div class="l"><div class="n">Cotisations<small>${String(r.taux_cotisations).replace('.',',')} % du CA encaissé</small></div><div class="v neg">− ${E(st.cotis)}</div></div>
     <div class="l"><div class="n">Local<small>${libLocal(st, r)}</small></div><div class="v neg">− ${E(st.local)}</div></div>
-    <div class="l"><div class="n">Consommables<small>huile, draps… au réel de chaque soin</small></div><div class="v neg">− ${E(st.conso)}</div></div>
+    <div class="l"><div class="n">Achats de produits<small>${Calc.achatsDe(from,to).length?`${Calc.achatsDe(from,to).length} achat${Calc.achatsDe(from,to).length>1?'s':''} sur la période`:'aucun achat sur la période'}</small></div><div class="v neg">− ${E(st.conso)}</div></div>
     <div class="l"><div class="n">Charges fixes<small>${S.charges.filter(c=>c.actif!==false).length} ligne${S.charges.filter(c=>c.actif!==false).length>1?'s':''} au prorata</small></div><div class="v neg">− ${E(st.fixes)}</div></div>
     <div class="fin ${st.net<0?'ko':''}"><div class="n">Il te reste</div><div class="v">${E(st.net)}</div></div>
   </div></div>`;
@@ -1606,7 +1613,7 @@ function rendreChargesV(){
       <div class="tiny muted" style="margin-top:2px">${st.nb ? `${E(parSeance)} par séance sur ${st.nb} séances` : 'aucune séance sur la période'}</div>
     </div>
     <div class="l"><div class="n">Le local<small>${libLocal(st, r)}</small></div><div class="v">${E(st.local)}</div></div>
-    <div class="l"><div class="n">Les consommables<small>au réel de chaque soin encaissé</small></div><div class="v">${E(st.conso)}</div></div>
+    <div class="l"><div class="n">Les achats de produits<small>huile, draps… le mois où tu les paies</small></div><div class="v">${E(st.conso)}</div></div>
     <div class="l"><div class="n">Les charges fixes<small>${S.charges.filter(c=>c.actif!==false).length} ligne${S.charges.filter(c=>c.actif!==false).length>1?'s':''}, au prorata</small></div><div class="v">${E(st.fixes)}</div></div>
     <div class="l"><div class="n">Les cotisations<small>${String(r.taux_cotisations).replace('.',',')} % du chiffre d’affaires</small></div><div class="v">${E(st.cotis)}</div></div>
     <div class="fin"><div class="n">Tout ce qui sort</div><div class="v">${E(sorties)}</div></div>
@@ -1640,17 +1647,16 @@ function rendreChargesV(){
     </div>
     <p class="tiny muted" style="margin:10px 0 0">C’est toi qui fixes ce que le local te coûte : un montant au mois, un montant par massage, ou les deux — l’app additionne</p></div>`;
 
-  const prods = (S.produits||[]).filter(p=>p.actif!==false);
-  html += `<div class="card"><div class="card-t">Les consommables <a href="#" class="lien" data-va="stock">gérer le stock</a></div>`;
-  if (prods.length && (S.consos||[]).length){
-    html += `<div class="lst">${prods.map(p=>{
-      const usage = Calc.usageProduit(p.id, from, to);
-      const cout = usage * Calc.prixUnite(p);
-      return `<div class="it"><div class="m"><b>${esc(p.libelle)}</b><small>${Q(usage)} ${uTxt(usage,p.unite)} ${p.unite==='mL'?'utilisés':'utilisées'} sur la période</small></div><div class="v">${E2(cout)}</div></div>`;
+  const achats = Calc.achatsDe(from, to).slice().sort((a,b)=>b.date_achat.localeCompare(a.date_achat));
+  html += `<div class="card"><div class="card-t">Les achats de produits <a href="#" class="lien" data-va="stock">acheter</a></div>`;
+  if (achats.length){
+    html += `<div class="lst">${achats.map(a=>{
+      const p = prod(a.produit_id); const d = new Date(a.date_achat + 'T12:00');
+      return `<button class="it" data-achat="${a.id}"><div class="m"><b>${esc(p?p.libelle:a.libelle||'Produit')}</b><small>${d.getDate()} ${MOIS3[d.getMonth()]} · ${Q(a.quantite)} × ${E2(Number(a.montant)/Math.max(1,Number(a.quantite)))}</small></div><div class="v">${E2(a.montant)}</div></button>`;
     }).join('')}
-    <div class="it" style="background:var(--creme2);border-radius:10px;padding-left:10px;padding-right:10px"><div class="m"><b>Total</b><small>compté soin par soin</small></div><div class="v"><b>${E(st.conso)}</b></div></div></div>`;
+    <div class="it" style="background:var(--creme2);border-radius:10px;padding-left:10px;padding-right:10px"><div class="m"><b>Total sur la période</b><small>déduit le mois de l’achat</small></div><div class="v"><b>${E(st.conso)}</b></div></div></div>`;
   } else {
-    html += `<p class="tiny muted" style="margin:0">Aucun produit relié aux soins. En attendant, le forfait de ${E2(r.conso_seance)} par séance s’applique — soit ${E(st.conso)} sur la période</p>`;
+    html += `<p class="tiny muted" style="margin:0">Aucun achat sur la période. Quand tu rachètes de l’huile ou des draps, tape « J’ai acheté » dans Stock : la dépense tombe dans le mois, le stock remonte</p>`;
   }
   html += `</div>`;
 
@@ -2147,6 +2153,54 @@ function sheetConsoSoin(pid){
   });
 }
 
+/* ----- Achats de produits (le geste « j'ai racheté ») ----- */
+function sheetAchat(produitId, achatId){
+  const a = achatId ? (S.achats||[]).find(y=>String(y.id)===String(achatId)) : null;
+  const p = prod(a ? a.produit_id : produitId); if (!p) return;
+  const q0 = a ? Number(a.quantite) : 1;
+  const m0 = a ? Number(a.montant) : Number(p.prix_achat||0);
+  const d0 = a ? a.date_achat : ymd(new Date());
+  const html = `
+    <p class="tiny muted" style="margin:0 0 10px">Combien tu en as acheté, ce que tu as payé en tout, et quand. La dépense tombe dans les charges de ce mois-là, et le stock remonte d’autant</p>
+    <div class="f3">
+      <div><label class="f-l" for="acQ">Combien</label><input class="f" id="acQ" type="number" inputmode="numeric" min="1" step="1" value="${q0}"></div>
+      <div><label class="f-l" for="acM">Payé en tout</label><input class="f" id="acM" type="number" inputmode="decimal" min="0" step="0.5" value="${m0}"></div>
+      <div><label class="f-l" for="acD">Le jour</label><input class="f" id="acD" type="date" value="${d0}"></div>
+    </div>
+    <p class="mini" style="margin:6px 0 0" id="acInfo"></p>
+    <button class="btn" style="margin-top:14px" id="acSave">${a?'Enregistrer':'C’est acheté'}</button>
+    ${a?`<button class="btn sm danger" style="margin-top:8px" data-suppachat="${a.id}">Supprimer cet achat</button>`:''}`;
+  ouvrirSheet(`${a?'Achat · ':'J’ai acheté · '}${p.libelle}`, html);
+  const b = $('#shBody');
+  const info = () => {
+    const q = Number(b.querySelector('#acQ').value||0), m = Number(b.querySelector('#acM').value||0);
+    b.querySelector('#acInfo').textContent = q>0
+      ? `${q} × ${Q(p.contenance)} ${uTxt(p.contenance,p.unite)} = + ${Q(q*Number(p.contenance))} ${uTxt(q*Number(p.contenance),p.unite)} en stock${m>0?` · ${E2(m/q)} l’unité`:''}`
+      : '';
+  };
+  info();
+  b.querySelector('#acQ').addEventListener('input', ()=>{ const q = Number(b.querySelector('#acQ').value||0); if (!a && q>0) b.querySelector('#acM').value = Math.round(q*Number(p.prix_achat||0)*100)/100; info(); });
+  b.querySelector('#acM').addEventListener('input', info);
+  b.querySelector('#acSave').addEventListener('click', async ()=>{
+    const q = Number(b.querySelector('#acQ').value||0), m = Number(b.querySelector('#acM').value||0), d = b.querySelector('#acD').value;
+    if (!(q>0)) return toast('Combien en as-tu acheté ?');
+    if (!d) return toast('Il manque le jour');
+    const row = { produit_id: p.id, libelle: p.libelle, quantite: q, montant: m, date_achat: d };
+    if (a){
+      const delta = (q - Number(a.quantite)) * Number(p.contenance||1);
+      await DB.update('achats', a.id, row);
+      if (delta) await DB.update('produits', p.id, { stock: Math.max(0, Number(p.stock||0) + delta) });
+    } else {
+      await DB.insert('achats', row);
+      await DB.update('produits', p.id, { stock: Number(p.stock||0) + q*Number(p.contenance||1) });
+      /* le prix habituel suit le dernier achat : la prochaine fois, c'est pré-rempli juste */
+      if (m>0 && Math.abs(m/q - Number(p.prix_achat||0)) > 0.005) await DB.update('produits', p.id, { prix_achat: Math.round(m/q*100)/100 });
+    }
+    fermerSheet(); rendreTout();
+    toast(a ? 'Achat modifié' : `${E(m)} de ${p.libelle} — dans les charges de ${MOIS[new Date(d+'T12:00').getMonth()]}`);
+  });
+}
+
 /* ----- Charges ----- */
 function sheetCharge(id){
   const c = id ? S.charges.find(x=>String(x.id)===String(id)) : null;
@@ -2503,10 +2557,15 @@ function brancher(){
     }
     if (x = t('[data-libre]')){ const d = new Date(x.dataset.libre); return sheetAjout({date:d}); }
     if (x = t('[data-prod]'))      return sheetProduit(x.dataset.prod);
-    if (x = t('[data-rachat]')){
-      const p = prod(x.dataset.rachat); if (!p) return;
-      await DB.update('produits', p.id, { stock: Number(p.stock||0) + Number(p.contenance||0) });
-      rendreTout(); return toast(`+ ${Q(p.contenance)} ${uTxt(p.contenance,p.unite)} · ${p.libelle}`);
+    if (x = t('[data-rachat]'))    return sheetAchat(x.dataset.rachat);
+    if (x = t('[data-achat]'))     return sheetAchat(null, x.dataset.achat);
+    if (x = t('[data-suppachat]')){
+      if (!confirm('Supprimer cet achat ? Le stock redescendra d’autant.')) return;
+      const a = (S.achats||[]).find(y=>String(y.id)===String(x.dataset.suppachat));
+      if (a){ const p = prod(a.produit_id);
+        if (p) await DB.update('produits', p.id, { stock: Math.max(0, Number(p.stock||0) - Number(a.quantite||0)*Number(p.contenance||1)) });
+        await DB.remove('achats', a.id); }
+      fermerSheet(); rendreTout(); return toast('Achat supprimé');
     }
     if (x = t('[data-soin]'))      return sheetConsoSoin(x.dataset.soin);
     if (x = t('[data-charge]'))    return sheetCharge(x.dataset.charge);
@@ -2702,6 +2761,18 @@ function seedDemo(){
     }
   }
 
+  const achats = [];
+  {
+    let d = new Date(debut); d.setDate(3);
+    for (let m = 0; m < 5; m++){
+      const dd = new Date(d.getFullYear(), d.getMonth()+m, 3 + Math.floor(rnd()*20));
+      if (dd > new Date()) break;
+      achats.push({ id:uid(), produit_id:produits[0].id, libelle:produits[0].libelle, quantite:1, montant:32, date_achat:ymd(dd) });
+      if (m % 2 === 0) achats.push({ id:uid(), produit_id:produits[1].id, libelle:produits[1].libelle, quantite:1, montant:25, date_achat:ymd(addD(dd,4)) });
+      if (m % 3 === 1) achats.push({ id:uid(), produit_id:produits[2].id, libelle:produits[2].libelle, quantite:1, montant:19, date_achat:ymd(addD(dd,9)) });
+    }
+  }
+
   const charges = [
     { id:uid(), libelle:'Assurance RC professionnelle', type:'fixe_annuelle', montant:180, actif:true, date_debut:ymd(debut) },
     { id:uid(), libelle:'Abonnement Systeme.io',        type:'fixe_mensuelle', montant:27,  actif:true, date_debut:ymd(debut) },
@@ -2715,7 +2786,7 @@ function seedDemo(){
     received_at:new Date().toISOString()
   }];
 
-  return { prestations, clientes, seances, charges, produits, conso_prestations,
+  return { prestations, clientes, seances, charges, produits, conso_prestations, achats,
            evenements_bruts:bruts, reglages: Object.assign({}, REGLAGES_DEFAUT) };
 }
 
