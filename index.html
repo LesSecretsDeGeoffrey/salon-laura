@@ -626,7 +626,7 @@ const S = {
   cliFiltre: 'toutes', cliQ: '',
 };
 const REGLAGES_DEFAUT = {
-  id:1, tarif_local_h:25, arrondi_local:'reelle', battement_min:15, conso_seance:3,
+  id:1, local_mois:0, local_seance:0, battement_min:15, conso_seance:3,
   taux_cotisations:24.6, taux_libelle:'Micro-entreprise BNC (libéral non réglementé)',
   plafond_ca:77700, objectif_net:1800,
   relance_jours:30,
@@ -772,14 +772,15 @@ const LIB_PAIEMENT = { cb:'Carte', especes:'Espèces', virement:'Virement', bon_
 
 const Calc = {
 
-  /** Heures de local consommées par une séance (durée du soin + battement). */
+  /** Heures occupées par une séance (durée du soin + battement) — sert au remplissage. */
   heuresLocal(dureeMin, r = S.reglages){
-    const h = (Number(dureeMin||0) + Number(r.battement_min||0)) / 60;
-    if (r.arrondi_local === 'heure') return Math.ceil(h);
-    if (r.arrondi_local === 'demi')  return Math.ceil(h*2)/2;
-    return h;
+    return (Number(dureeMin||0) + Number(r.battement_min||0)) / 60;
   },
-  coutLocal(dureeMin, r = S.reglages){ return Calc.heuresLocal(dureeMin, r) * Number(r.tarif_local_h||0); },
+  /** Le local n'est plus calculé sur les heures : Laura saisit ce qu'elle paie,
+      au mois (charge fixe, comptée dans localMois) et/ou par massage (ici). */
+  coutLocal(dureeMin, r = S.reglages){ return Number(r.local_seance||0); },
+  /** Le loyer mensuel du local, ramené au prorata de la période. */
+  localMois(from, to, r = S.reglages){ return Number(r.local_mois||0) * jours(from, to) / 30.4375; },
   taux(r = S.reglages){ return Number(r.taux_cotisations||0)/100; },
 
   /* ----- Consommables : ce que chaque soin utilise vraiment ----- */
@@ -973,7 +974,9 @@ const Calc = {
 
     const ca    = honorees.reduce((a,s)=>a+Number(s.prix_facture||0), 0);
     const cotis = ca * Calc.taux(r);
-    const local = honorees.reduce((a,s)=>a+Calc.coutLocal(s.duree_min, r), 0);
+    const localSeances = honorees.reduce((a,s)=>a+Calc.coutLocal(s.duree_min, r), 0);
+    const localMois = Calc.localMois(from, to, r);
+    const local = localSeances + localMois;
     const conso = honorees.reduce((a,s)=>a+Calc.consoPrestation(s.prestation_id, r), 0);
     const fixes = Calc.chargesFixes(from, to);
     const net   = ca - cotis - local - conso - fixes;
@@ -999,7 +1002,7 @@ const Calc = {
       nb: honorees.length,
       nbPrevues: toutes.filter(s=>s.statut==='prevue').length,
       nbAnnulees: toutes.filter(s=>s.statut==='annulee'||s.statut==='noshow').length,
-      ca, cotis, local, conso, fixes, net,
+      ca, cotis, local, localSeances, localMois, conso, fixes, net,
       panier: honorees.length ? ca/honorees.length : 0,
       hVendues, hOuvrables,
       remplissage: hOuvrables>0 ? hVendues/hOuvrables*100 : 0,
@@ -1030,7 +1033,7 @@ const Calc = {
   /** Combien de séances pour atteindre `objectif` € net sur la période. */
   simuler(objectif, proportions, from, to){
     const r = S.reglages;
-    const fixes = Calc.chargesFixes(from, to);
+    const fixes = Calc.chargesFixes(from, to) + Calc.localMois(from, to, r);
     let netMoyen = 0, heuresMoyen = 0;
     for (const [pid, part] of Object.entries(proportions)){
       const p = prest(pid); if (!p) continue;
@@ -1082,7 +1085,7 @@ const Calc = {
     }
     if (heuresMoyen <= 0) return { nb:0, net:0, hOuvrables };
     const nb = Math.floor(hOuvrables / heuresMoyen);
-    return { nb, net: nb*netMoyen - Calc.chargesFixes(from, to), hOuvrables };
+    return { nb, net: nb*netMoyen - Calc.chargesFixes(from, to) - Calc.localMois(from, to, r), hOuvrables };
   },
 
   bornes(per, ref){
@@ -1117,6 +1120,13 @@ function messageRelance(c){
 </script>
 <script>
 /* ========================= Helpers de rendu ========================= */
+/** « 300 € par mois + 5 € par massage » — ce que Laura a saisi pour son local. */
+function libLocal(st, r){
+  const parts = [];
+  if (Number(r.local_mois)>0)   parts.push(`${E2(r.local_mois)} par mois au prorata`);
+  if (Number(r.local_seance)>0) parts.push(`${st.nb} × ${E2(r.local_seance)}`);
+  return parts.length ? parts.join(' + ') : 'rien de saisi (réglages)';
+}
 const ICO = {
   bell:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8.5a6 6 0 1 0-12 0c0 6-2.5 7.5-2.5 7.5h17S18 14.5 18 8.5"/><path d="M10 20a2.2 2.2 0 0 0 4 0"/></svg>',
   box:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.8l8 4v10.4l-8 4-8-4V6.8z"/><path d="M4.2 6.9L12 10.8l7.8-3.9M12 10.8V20.9"/></svg>',
@@ -1215,7 +1225,7 @@ function rendreJour(){
   const st = Calc.periode(sod(d), eod(d));
   const prevues = st.toutes.filter(s=>s.statut==='prevue');
   const aVenir  = prevues.reduce((a,s)=>a+Number(s.prix_facture||0),0);
-  const netJour = st.ca - st.cotis - st.local - st.conso;
+  const netJour = st.ca - st.cotis - st.localSeances - st.conso;
   $('#jStats').innerHTML = `
     <div class="jstat stag"><div class="v">${E(st.ca)}</div><div class="l">Encaissé</div></div>
     <div class="jstat stag"><div class="v">${E(aVenir)}</div><div class="l">Encore prévu</div></div>
@@ -1521,7 +1531,7 @@ function rendreResultats(){
       <div class="tiny muted" style="margin-top:2px">${st.nb} séance${st.nb>1?'s':''} encaissée${st.nb>1?'s':''}${st.nbPrevues?` · ${st.nbPrevues} encore à encaisser`:''}</div>
     </div>
     <div class="l"><div class="n">Cotisations<small>${String(r.taux_cotisations).replace('.',',')} % du CA encaissé</small></div><div class="v neg">− ${E(st.cotis)}</div></div>
-    <div class="l"><div class="n">Local<small>${H(st.hVendues)} × ${E2(r.tarif_local_h)}</small></div><div class="v neg">− ${E(st.local)}</div></div>
+    <div class="l"><div class="n">Local<small>${libLocal(st, r)}</small></div><div class="v neg">− ${E(st.local)}</div></div>
     <div class="l"><div class="n">Consommables<small>huile, draps… au réel de chaque soin</small></div><div class="v neg">− ${E(st.conso)}</div></div>
     <div class="l"><div class="n">Charges fixes<small>${S.charges.filter(c=>c.actif!==false).length} ligne${S.charges.filter(c=>c.actif!==false).length>1?'s':''} au prorata</small></div><div class="v neg">− ${E(st.fixes)}</div></div>
     <div class="fin ${st.net<0?'ko':''}"><div class="n">Il te reste</div><div class="v">${E(st.net)}</div></div>
@@ -1595,7 +1605,7 @@ function rendreChargesV(){
       <div class="v">${E(exploitation)}</div>
       <div class="tiny muted" style="margin-top:2px">${st.nb ? `${E(parSeance)} par séance sur ${st.nb} séances` : 'aucune séance sur la période'}</div>
     </div>
-    <div class="l"><div class="n">Le local<small>${H(st.hVendues)} occupées × ${E2(r.tarif_local_h)}</small></div><div class="v">${E(st.local)}</div></div>
+    <div class="l"><div class="n">Le local<small>${libLocal(st, r)}</small></div><div class="v">${E(st.local)}</div></div>
     <div class="l"><div class="n">Les consommables<small>au réel de chaque soin encaissé</small></div><div class="v">${E(st.conso)}</div></div>
     <div class="l"><div class="n">Les charges fixes<small>${S.charges.filter(c=>c.actif!==false).length} ligne${S.charges.filter(c=>c.actif!==false).length>1?'s':''}, au prorata</small></div><div class="v">${E(st.fixes)}</div></div>
     <div class="l"><div class="n">Les cotisations<small>${String(r.taux_cotisations).replace('.',',')} % du chiffre d’affaires</small></div><div class="v">${E(st.cotis)}</div></div>
@@ -1608,8 +1618,9 @@ function rendreChargesV(){
     const p = prest(pid); if (!p) continue;
     netMoyen += part * Calc.netSeance(p.prix, p.duree_min, p.id, r);
   }
-  if (netMoyen > 0 && st.fixes > 0){
-    const seuil = Math.ceil(st.fixes / netMoyen);
+  const fixesTotal = st.fixes + st.localMois;
+  if (netMoyen > 0 && fixesTotal > 0){
+    const seuil = Math.ceil(fixesTotal / netMoyen);
     const atteint = st.nb >= seuil;
     html += `<div class="card" style="border-color:${atteint?'var(--sauge)':'var(--or)'};border-width:1.5px">
       <div class="card-t">Seuil de rentabilité</div>
@@ -1617,17 +1628,17 @@ function rendreChargesV(){
       ${atteint
         ? `Tu en as fait <b>${st.nb}</b> : les ${st.nb-seuil} suivantes sont pour toi`
         : `Tu en es à <b>${st.nb}</b> — il en manque <b>${seuil-st.nb}</b> pour rentrer dans tes frais`}</p>
-      <p class="tiny muted" style="margin:8px 0 0">Le local et les consommables ne comptent pas ici : ils n’existent que si une cliente vient. Seules les charges fixes tombent quoi qu’il arrive</p>
+      <p class="tiny muted" style="margin:8px 0 0">Comptent ici : tes charges fixes et ton loyer mensuel s’il y en a un. Le reste (consommables, local par massage) n’existe que si une cliente vient</p>
     </div>`;
   }
 
-  html += `<div class="card"><div class="card-t">Le local</div>
+  html += `<div class="card"><div class="card-t">Le local <a href="#" class="lien" data-reglages="local">modifier</a></div>
     <div class="lst">
-      <div class="it"><div class="m"><b>${E2(r.tarif_local_h)} de l’heure</b><small>${
-        {reelle:'facturé à la minute', demi:'demi-heure entamée', heure:'heure entamée'}[r.arrondi_local]||''} · battement de ${r.battement_min} min</small></div><div class="v">${E(st.local)}</div></div>
+      <div class="it"><div class="m"><b>${Number(r.local_mois)>0?E2(r.local_mois)+' par mois':'Pas de loyer mensuel'}</b><small>${Number(r.local_mois)>0?'au prorata de la période':'à saisir si tu paies un forfait'}</small></div><div class="v">${E(st.localMois)}</div></div>
+      <div class="it"><div class="m"><b>${Number(r.local_seance)>0?E2(r.local_seance)+' par massage':'Rien par massage'}</b><small>${st.nb} séance${st.nb>1?'s':''} encaissée${st.nb>1?'s':''}</small></div><div class="v">${E(st.localSeances)}</div></div>
       <div class="it"><div class="m"><b>${H(st.hVendues)} occupées</b><small>sur ${H(st.hOuvrables)} ouvrables — ${Math.round(st.remplissage)} % de remplissage</small></div></div>
     </div>
-    <p class="tiny muted" style="margin:10px 0 0">Charge variable : tu ne paies que les heures réservées. Une heure vide ne coûte rien, mais ne rapporte rien non plus</p></div>`;
+    <p class="tiny muted" style="margin:10px 0 0">C’est toi qui fixes ce que le local te coûte : un montant au mois, un montant par massage, ou les deux — l’app additionne</p></div>`;
 
   const prods = (S.produits||[]).filter(p=>p.actif!==false);
   html += `<div class="card"><div class="card-t">Les consommables <a href="#" class="lien" data-va="stock">gérer le stock</a></div>`;
@@ -1676,7 +1687,7 @@ function rendreSimu(){
     <div class="row"><input class="f" id="objInput" type="number" inputmode="numeric" min="0" step="50" value="${Math.round(r.objectif_net||0)}" style="flex:1"><span class="serif" style="font-size:22px">€</span></div>
     <label class="f-l" for="batt">Battement entre deux clientes <span style="float:right;color:var(--sauge);font-weight:700" id="battV">${r.battement_min} min</span></label>
     <input id="batt" type="range" min="0" max="45" step="5" value="${r.battement_min}" style="width:100%;accent-color:var(--sauge)">
-    <p class="mini" style="margin:6px 0 0">Installation, ménage, huile… C’est le réglage qui change le plus le classement de tes soins</p>
+    <p class="mini" style="margin:6px 0 0">Installation, ménage, huile… Il compte dans tes heures occupées et dans le nombre de séances qui tiennent dans ta journée</p>
   </div>`;
 
   html += `<div class="seg">
@@ -1697,7 +1708,7 @@ function rendreSimu(){
   }
 
   if (!res.possible){
-    html += `<div class="alert">Avec ces réglages, une séance coûte plus cher qu’elle ne rapporte. Vérifie le tarif du local, le battement et tes prix</div>`;
+    html += `<div class="alert">Avec ces réglages, une séance coûte plus cher qu’elle ne rapporte. Vérifie ce que tu as saisi pour le local, tes consommables et tes prix</div>`;
   } else {
     const trop = res.remplissage > 100;
     html += `<div class="card" style="border-color:${trop?'var(--rouge)':'var(--sauge)'};border-width:1.5px">
@@ -2265,15 +2276,13 @@ function sheetReglages(){
     </div>
     <button class="btn sm ghost" id="addPrest" style="margin-top:8px">${ICO.plus}Ajouter un soin</button>
 
-    <div class="card-t" style="margin-top:18px">Le local et le battement</div>
+    <div class="card-t" style="margin-top:18px" id="rgLocalT">Le local</div>
     <div class="f2">
-      <div><label class="f-l" for="rgLoc">Tarif horaire du local</label><input class="f" id="rgLoc" type="number" inputmode="decimal" min="0" step="0.5" value="${Number(r.tarif_local_h)}"></div>
-      <div><label class="f-l" for="rgArr">Facturé</label><select class="f" id="rgArr">
-        <option value="reelle" ${r.arrondi_local==='reelle'?'selected':''}>À la minute</option>
-        <option value="demi" ${r.arrondi_local==='demi'?'selected':''}>Demi-heure entamée</option>
-        <option value="heure" ${r.arrondi_local==='heure'?'selected':''}>Heure entamée</option>
-      </select></div>
+      <div><label class="f-l" for="rgLocM">Loyer par mois</label><input class="f" id="rgLocM" type="number" inputmode="decimal" min="0" step="1" value="${Number(r.local_mois||0)||''}" placeholder="0"></div>
+      <div><label class="f-l" for="rgLocS">Par massage</label><input class="f" id="rgLocS" type="number" inputmode="decimal" min="0" step="0.5" value="${Number(r.local_seance||0)||''}" placeholder="0"></div>
     </div>
+    <p class="mini" style="margin:6px 0 0">Tu paies un forfait au mois, un montant par massage, ou les deux : remplis ce qui te correspond, l’app additionne. Laisse vide ce qui ne s’applique pas</p>
+    <div class="card-t" style="margin-top:18px">Le battement</div>
     <label class="f-l" for="rgBatt">Battement entre deux clientes (min)</label>
     <input class="f" id="rgBatt" type="number" inputmode="numeric" min="0" step="5" value="${Number(r.battement_min)}">
 
@@ -2329,8 +2338,8 @@ function sheetReglages(){
       }
     }
     await DB.majReglages({
-      tarif_local_h: Number(b.querySelector('#rgLoc').value||0),
-      arrondi_local: b.querySelector('#rgArr').value,
+      local_mois: Number(b.querySelector('#rgLocM').value||0),
+      local_seance: Number(b.querySelector('#rgLocS').value||0),
       battement_min: Number(b.querySelector('#rgBatt').value||0),
       taux_cotisations: Number(b.querySelector('#rgTx').value||0),
       plafond_ca: Number(b.querySelector('#rgPl').value||0),
@@ -2503,6 +2512,8 @@ function brancher(){
     if (x = t('[data-charge]'))    return sheetCharge(x.dataset.charge);
     if (x = t('#addCharge')){ e.preventDefault(); return sheetCharge(null); }
     if (x = t('[data-va]')){ e.preventDefault(); return allerA(x.dataset.va); }
+    if (x = t('[data-reglages]')){ e.preventDefault(); sheetReglages();
+      const c = document.getElementById('rgLocalT'); if (c) c.scrollIntoView({block:'start'}); return; }
     if (x = t('[data-editprest]')) return sheetPrestation(x.dataset.editprest);
     if (x = t('[data-editseance]')) return sheetSeanceEdit(x.dataset.editseance);
     if (x = t('[data-valbrut]'))   return validerBrut(x.dataset.valbrut);
